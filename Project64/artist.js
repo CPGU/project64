@@ -6,26 +6,18 @@ function preload() {
 
     url = getURL();
 
-    var searchQuery = split(url, '=');
+    var searchQuery = split(url, '=')[1];
+    
+    artistNameElement = select('#artistName');
 
-    artistName = select('#artistName');
-    artistName.html(searchQuery[1]);
-
-    apiURL = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="+searchQuery[1]+"&api_key=50e22ce4bf1afc04593ed626f21223d7&format=json";
+    apiURL = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="+searchQuery+"&api_key=50e22ce4bf1afc04593ed626f21223d7&format=json";
     result = loadJSON(apiURL);
-
 }
 
 function setup() {
-
     noLoop();
 }
 
 function draw() {
-    var artistInfoPlayCount = result.artist.stats.playcount;
-    console.log(artistInfoPlayCount);
+    artistNameElement.html(result.artist.name);
 }
-
-//function artistInformation(data) {
-//   console.log(data.artist.stats.playcount);
-//}
