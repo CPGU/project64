@@ -9,3 +9,10 @@
 .container {
   display: flex;
 }
+
+#app {
+    width: 70vw;
+    height: 50vh;
+    padding-top: 25vh;
+    padding-left: 15vw;
+}

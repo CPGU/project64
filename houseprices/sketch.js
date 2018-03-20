@@ -1,6 +1,8 @@
 var sel;
 var item;
 var regionData = [];
+var canvas_width;
+var canvas_height;
 
 // Global variable to store the gallery object. The gallery object is
 // a container for all the visualisations.
@@ -12,7 +14,9 @@ function preload() {
 
 function setup() {
     // Create a canvas to fill the content div from index.html.
-    var c = createCanvas(innerWidth, innerHeight);
+    canvas_width = $("#app").width();
+    canvas_height = $("#app").height();
+    var c = createCanvas(canvas_width, canvas_height);
     c.parent('app');
 
     // Create a new gallery object.
@@ -47,10 +51,12 @@ function setup() {
 }
 
 function mySelection() {
+    canvas_width = $("#app").width();
+    canvas_height = $("#app").height();
+    canvas_bottom_y = $("#app").position().top + canvas_height;
     regionData = [];
     clear();
     item = sel.value();
-    console.log(item);
 
     // find rows with the value Enfield in cell in column Name
     var rows = table.findRows(item, 'Name');
@@ -60,26 +66,15 @@ function mySelection() {
         regionData.push(rows[i].arr[2]);
     }
 
-    console.log(regionData);
-
     for(var i=0; i<regionData.length; i++) {
         fill(0);
-        var x = map(i, 0, regionData.length, 0, innerWidth);
-        var h = map(regionData[i], 0, max(regionData),0, height);
+        var x = map(i, 0, regionData.length, 0, canvas_width);
+        var h = map(regionData[i], 0, max(regionData),0, canvas_height);
         
-        rect(x, 800, innerWidth/regionData.length, -h) 
+        rect(x, canvas_bottom_y, canvas_width/regionData.length, -h);
     }
 }
 
 function draw() {
     background(255);
-    if (gallery.selectedFigure != null) {
-        gallery.selectedFigure.draw();
-    }
-}
-
-//Code to redirect url
-function searchArtist() {
-    var artistName = input.value();
-    window.location.replace("artist.html?artistName="+artistName);
 }
