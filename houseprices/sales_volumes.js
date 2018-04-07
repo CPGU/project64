@@ -1,23 +1,26 @@
 function SalesVolumesByRegion() {
+    this.loaded = false;
     this.preload = function() {
-        this.table = loadTable("data/Sales-Volumes.csv", "csv", "header");
-    }
+        var self = this;
+        this.table = loadTable(
+            'data/Sales-Volumes.csv', 'csv', 'header',
+            function(data) {
+                self.loaded = true;
+            }
+        );
+    };
 
     this.setup = function() {
+        var regions = this.table.getColumn('Name');
+        regions = new Set(regions);
+        regions = Array.from(regions);
         console.log(this.table);
-        console.log(this.table.name);
-        console.log(this.table.rows);
-        console.log(this.table.columns);
-        console.log(this.table.getColumn('Name'));
-
-        //var regions = this.table.getColumn('Name');
+        console.log(regions);
         region_sel = createSelect();
-        region_sel.position(100,100);
-        for(var i=0; i<10; i++) {
-            region_sel.option('Hello');
-            console.log('Hello');
-            console.log(this.table);
+        region_sel.position(300,300);
+        for(var i=0; i<regions.length; i++) {
+            region_sel.option(regions[i]);
         }
         //region_sel.changed(this.draw())
-    }
+    };
 }

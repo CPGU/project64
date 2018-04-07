@@ -8,6 +8,14 @@ var canvas_height;
 // a container for all the visualisations.
 var gallery;
 
+function preload() {
+    sales = [];
+    sales.push(new SalesVolumesByRegion());
+    for(var i=0; i<sales.length; i++) {
+        sales[i].preload();
+    }
+}
+
 function setup() {
     // Create a canvas to fill the content div from index.html.
     canvas_width = $("#app").width();
@@ -41,12 +49,8 @@ function setup() {
     //}
     //sel.changed(mySelection);
     //
-    var sales = new SalesVolumesByRegion();
-    sales.preload();
-    sales.setup();
+    sales[0].setup();
     
-
-    noLoop();
 }
 
 function mySelection() {
