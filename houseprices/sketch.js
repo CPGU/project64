@@ -8,10 +8,6 @@ var canvas_height;
 // a container for all the visualisations.
 var gallery;
 
-function preload() {
-    table = loadTable("data/Sales-Volumes.csv", "csv", "header");
-}
-
 function setup() {
     // Create a canvas to fill the content div from index.html.
     canvas_width = $("#app").width();
@@ -28,24 +24,27 @@ function setup() {
     // gallery.addFigure(new PayGapByJob2017());
     // gallery.addFigure(new PayGapTimeSeries());
 
-    //input = createInput();
-    //input.position(20,50);
-
-    //button = createButton('submit');
-    //button.position(input.x + input.width, 65);
-    //button.mousePressed(searchArtist);
-    var places = table.getColumn('Name');
+    //var places = table.getColumn('Name');
+    //places = new Set(places);
+    //places = Array.from(places);
+    /*
     places = places.filter(function(item, index, arr){
         return arr.indexOf(item) == index;
     });
+    */
 
     ///create a select drop down menu for all areas
-    sel = createSelect();
-    sel.position(100,100);
-    for(var i=0; i<places.length; i++) {
-        sel.option(places[i]);
-    }
-    sel.changed(mySelection);
+    //sel = createSelect();
+    //sel.position(100,100);
+    //for(var i=0; i<places.length; i++) {
+    //    sel.option(places[i]);
+    //}
+    //sel.changed(mySelection);
+    //
+    var sales = new SalesVolumesByRegion();
+    sales.preload();
+    sales.setup();
+    
 
     noLoop();
 }
