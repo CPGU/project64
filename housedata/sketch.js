@@ -5,15 +5,18 @@ var gallery;
 
 function setup() {
   // Create a canvas to fill the content div from index.html.
-  canvasContainer = $('#app');
-  var c = createCanvas(1024, 576);
-  c.parent('app');
+    canvas_width = $("#app").width();
+    canvas_height = $("#app").height();
+    var c = createCanvas(canvas_width, canvas_height);
+    c.parent('app');
 
-  // Create a new gallery object.
-  gallery = new Gallery();
+    // Create a new gallery object.
+    gallery = new Gallery();
 
-  // Add the visualisation objects here.
-  gallery.addFigure(new SalesVolumesByRegion());
+    // Add the visualisation objects here.
+    gallery.addFigure(new SalesVolumesByRegion());
+    gallery.addFigure(new AveragePriceByRegion());
+
 }
 
 function draw() {

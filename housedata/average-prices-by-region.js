@@ -1,11 +1,11 @@
-function SalesVolumesByRegion() {
+function AveragePriceByRegion() {
 
     // Name for the visualisation to appear in the menu bar.
-    this.name = 'Sales Volumes By Region';
+    this.name = 'Average Price By Region';
 
     // Each visualisation must have a unique ID with no special
     // characters.
-    this.id = 'sales-volumes-by-region';
+    this.id = 'average-price-by-region';
 
     // Property to represent whether data has been loaded.
     this.loaded = false;
@@ -15,7 +15,7 @@ function SalesVolumesByRegion() {
     this.preload = function() {
         var self = this;
         this.data = loadTable(
-          'data/Sales-Volumes.csv', 'csv', 'header',
+          'data/Average-Prices-SA-SM.csv', 'csv', 'header',
           // Callback function to set the value
           // this.loaded to true.
           function(table) {
