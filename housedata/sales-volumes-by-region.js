@@ -31,12 +31,14 @@ function SalesVolumesByRegion() {
 
         // Create a select DOM element.
         region_sel = createSelect();
-        region_sel.position(200,100);
+        region_sel.position(300,100);
 
         // Fill the options with all company names.
         var regions = this.data.getColumn('Name');
         regions = new Set(regions);
         regions = Array.from(regions);
+        region_sel.option('Please select a region');
+        region_sel.option('');
         for(var i=1; i<regions.length; i++) {
             region_sel.option(regions[i]);
         }
