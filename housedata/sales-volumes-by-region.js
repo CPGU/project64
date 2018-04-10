@@ -145,7 +145,7 @@ function SalesVolumesByRegion() {
             var year = regionData[i].date.split('-')[0]
             var x = map(i, 0, regionData.length, 0, canvas_width);
             fill(0);
-            text(year, x, canvas_bottom_y - 50);
+            text(year, x, canvas_bottom_y - 100);
         }
 
         // Draw the pie chart!

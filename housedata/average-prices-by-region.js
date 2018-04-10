@@ -34,13 +34,13 @@ function AveragePriceByRegion() {
         region_sel.position(300,100);
 
         // Fill the options with all company names.
-        var header = this.data.getColumn('Name');
-        header = new Set(header);
-        header = Array.from(header);
+        var regions = this.data.getColumn('Name');
+        regions = new Set(regions);
+        regions = Array.from(regions);
         region_sel.option('Please select a region');
         region_sel.option('');
-        for(var i=1; i<header.length; i++) {
-            region_sel.option(header[i]);
+        for(var i=1; i<regions.length; i++) {
+            region_sel.option(regions[i]);
         }
         region_sel.changed(this.draw);
     };

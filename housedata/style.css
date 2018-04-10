@@ -4,12 +4,12 @@
 }
 
 .ui-menu {
-    width: 250px;
+    width: 20vw;
     height: 90vh;
 }
 
 .ui-menu-item-wrapper {
-    height: 50px;
+    height: 5vh;
 }
 
 .container {
@@ -22,10 +22,10 @@
 }
 
 #app {
-    width: 70vw;
-    height: 50vh;
-    padding-top: 25vh;
-    padding-left: 15vw;
+    width: 60vw;
+    height: 80vh;
+    margin-top: 0vh;
+    padding-left: 30vw;
 }
 
 #figure-menu {
