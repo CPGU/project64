@@ -1,11 +1,11 @@
-function SalesVolumesByRegion() {
+function SalesVolumesByRegionByYear() {
 
     // Name for the visualisation to appear in the menu bar.
-    this.name = 'Sales Volumes By Region';
+    this.name = 'Sales Volumes By Region By Year';
 
     // Each visualisation must have a unique ID with no special
     // characters.
-    this.id = 'sales-volumes-by-region';
+    this.id = 'sales-volumes-by-region-by-year';
 
     // Property to represent whether data has been loaded.
     this.loaded = false;
@@ -33,7 +33,7 @@ function SalesVolumesByRegion() {
         region_sel = createSelect();
         region_sel.position(200,100);
 
-        // Fill the options with all company names.
+        // Fill the options with all region names.
         var regions = this.data.getColumn('Name');
         regions = new Set(regions);
         regions = Array.from(regions);
@@ -41,6 +41,23 @@ function SalesVolumesByRegion() {
             region_sel.option(regions[i]);
         }
         region_sel.changed(this.draw);
+
+        // Create a year select DOM element
+        year_sel = createSelect();
+        year_sel.position(400,100);
+
+        // Fill the options with all years.
+        var years = this.data.getColumn('Date');
+        let yearSet = new Set();
+        for(var i=0; i<years.length; i++) {
+            yearSet.add(years[i].split('-')[0]);
+
+        }
+        var yearList = Array.from(yearSet);
+        for(var i=0; i<yearList.length; i++) {
+            year_sel.option(yearList[i]);
+        }
+        year_sel.changed(this.draw);
 
         canvas_width = $("canvas").width();
         canvas_height = $("canvas").height();
@@ -69,9 +86,13 @@ function SalesVolumesByRegion() {
         // Get the value of the company we're interested in from the
         // select item. Temporarily hard-code an example for now.
         region = region_sel.value();
+        year = year_sel.value();
 
         // Get the column of raw data for companyName.
         rows = this.data.findRows(region, 'Name');
+        rows = rows.filter(function(item) {
+            return item.arr[0].includes(year);
+        });
 
         // create array and push the value in 3rd column ie 2nd index of the array into regionData
         var regionValue = [];

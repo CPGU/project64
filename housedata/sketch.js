@@ -14,6 +14,7 @@ function setup() {
 
   // Add the visualisation objects here.
   gallery.addFigure(new SalesVolumesByRegion());
+  gallery.addFigure(new SalesVolumesByRegionByYear());
 }
 
 function draw() {
