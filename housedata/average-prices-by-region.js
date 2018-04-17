@@ -63,8 +63,6 @@ function AveragePriceByRegion() {
             return;
         }
 
-        regionData = [];
-
         // Get the value of the region we're interested in from the selected item.
         var region = region_sel.value();
 
