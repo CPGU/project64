@@ -1,4 +1,4 @@
-function AveragePriceByRegion() {
+function AveragePriceByRegion(c) {
 
     // Name for the visualisation to appear in the menu bar.
     this.name = 'Average Price By Region';
@@ -31,7 +31,8 @@ function AveragePriceByRegion() {
 
         // Create a select DOM element.
         region_sel = createSelect();
-        region_sel.position(300,100);
+        region_sel.position(400,100);
+        region_sel.id('regionSelection');
 
         // Fill the options with all company names.
         var regions = this.data.getColumn('Name');
@@ -70,6 +71,21 @@ function AveragePriceByRegion() {
         // Get the column of raw data for companyName.
         var rows = this.data.findRows(region, 'Name');
 
+        // Only displaying header label when a sel value has been selected.
+        if(region == "Please select a region") {
+            
+        } else {
+            push();
+            textSize(32);
+            text(region, 10, 30);
+            pop();
+
+            button = createButton("Snapshot <i class='fa fa-camera'></i>");
+            button.position(400,140);
+            button.id('snapshot');
+            button.mousePressed(this.snapshot);
+        }
+
         // create array and push the value in 3rd column ie 2nd index of the array into regionData
         for(var i=0; i<rows.length; i++) {
             regionData.push(rows[i].arr[2]);
@@ -91,4 +107,8 @@ function AveragePriceByRegion() {
         }
         */
     };
+
+    this.snapshot = function(c) {
+        saveCanvas(this.c, 'Test', 'png');
+    }
 }

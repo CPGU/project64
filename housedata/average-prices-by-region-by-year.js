@@ -1,11 +1,11 @@
-function SalesVolumesByRegionByYear(c) {
+function AveragePriceByRegionByYear(c) {
 
     // Name for the visualisation to appear in the menu bar.
-    this.name = 'Sales Volumes By Region By Year';
+    this.name = 'Average Prices By Region By Year';
 
     // Each visualisation must have a unique ID with no special
     // characters.
-    this.id = 'sales-volumes-by-region-by-year';
+    this.id = 'average-prices-by-region-by-year';
 
     // Property to represent whether data has been loaded.
     this.loaded = false;
@@ -15,12 +15,12 @@ function SalesVolumesByRegionByYear(c) {
     this.preload = function() {
         var self = this;
         this.data = loadTable(
-          'data/Sales-Volumes.csv', 'csv', 'header',
-          // Callback function to set the value
-          // this.loaded to true.
-          function(table) {
-            self.loaded = true;
-          });
+            'data/Average-Prices-SA-SM.csv', 'csv', 'header',
+            // Callback function to set the value
+            // this.loaded to true.
+            function(table) {
+              self.loaded = true;
+            });
     };
 
     this.setup = function() {
@@ -175,10 +175,10 @@ function SalesVolumesByRegionByYear(c) {
                 } else {
                     translate(mouseX+10, mouseY+10);
                 }
-                rect(0,0, 160, 60);
+                rect(0,0, 190, 60);
                 fill(0);
-                text("sales volume: " + regionData[i].value, 20,20);
-                text("date: " + regionData[i].date, 20,50);
+                text("Sales Volume: " + regionData[i].value, 20,20);
+                text("Date: " + regionData[i].date, 20,50);
                 pop();
                 pop();
             }

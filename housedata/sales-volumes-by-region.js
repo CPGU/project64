@@ -1,8 +1,8 @@
-function SalesVolumesByRegion() {
+function SalesVolumesByRegion(c) {
 
     // Name for the visualisation to appear in the menu bar.
     this.name = 'Sales Volumes By Region';
-
+    
     // Each visualisation must have a unique ID with no special
     // characters.
     this.id = 'sales-volumes-by-region';
@@ -31,7 +31,8 @@ function SalesVolumesByRegion() {
 
         // Create a select DOM element.
         region_sel = createSelect();
-        region_sel.position(300,100);
+        region_sel.position(400,100);
+        region_sel.id('regionSelection');
 
         // Fill the options with all company names.
         var regions = this.data.getColumn('Name');
@@ -47,11 +48,14 @@ function SalesVolumesByRegion() {
         canvas_width = $("canvas").width();
         canvas_height = $("canvas").height();
         canvas_bottom_y = $("canvas").position().top + canvas_height;
+        
+        
 
         total = 0;
         max_t = 0;
 
     };
+
 
     this.destroy = function() {
         removeElements();
@@ -71,6 +75,21 @@ function SalesVolumesByRegion() {
         // Get the value of the company we're interested in from the
         // select item. Temporarily hard-code an example for now.
         region = region_sel.value();
+
+        // Only displaying header label when a sel value has been selected.
+        if(region == "Please select a region") {
+            
+        } else {
+            push();
+            textSize(32);
+            text(region, 10, 30);
+            pop();
+
+            button = createButton("Snapshot <i class='fa fa-camera'></i>");
+            button.id('snapshot')
+            button.position(400,140);
+            button.mousePressed(this.snapshot);
+        }
 
         // Get the column of raw data for companyName.
         rows = this.data.findRows(region, 'Name');
@@ -132,8 +151,8 @@ function SalesVolumesByRegion() {
                 }
                 rect(0,0, 160, 60);
                 fill(0);
-                text("sales volume: " + regionData[i].value, 20,20);
-                text("date: " + regionData[i].date, 20,50);
+                text("Sales Volume: " + regionData[i].value, 20,20);
+                text("Date: " + regionData[i].date, 20,50);
                 pop();
                 pop();
             }
@@ -156,4 +175,10 @@ function SalesVolumesByRegion() {
         }
         */
     };
+
+    this.snapshot = function(c) {
+        saveCanvas(this.c, 'Test', 'png');
+    }
+
+   
 }
