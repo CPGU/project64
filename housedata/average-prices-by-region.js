@@ -30,20 +30,24 @@ function AveragePriceByRegion(c) {
         }
 
         // Create a select DOM element.
-        region_sel = createSelect();
-        region_sel.position(400,100);
-        region_sel.id('regionSelection');
+        createRegionDropdownMenu();
 
-        // Fill the options with all company names.
+        // Fill the options with all region names.
         var regions = this.data.getColumn('Name');
-        regions = new Set(regions);
-        regions = Array.from(regions);
+        regions = removeRegionDuplicates(regions);
+
+        // Set default option
         region_sel.option('Please select a region');
-        region_sel.option('');
-        for(var i=1; i<regions.length; i++) {
-            region_sel.option(regions[i]);
-        }
+        region_sel.option('---');
+
+        // fill the dropdown menu with options
+        fillDropdownMenu(regions, region_sel);
+
         region_sel.changed(this.draw);
+
+        canvas_width = $("canvas").width();
+        canvas_height = $("canvas").height();
+        canvas_bottom_y = $("canvas").position().top + canvas_height;
     };
 
     this.destroy = function() {
@@ -53,19 +57,17 @@ function AveragePriceByRegion(c) {
     // Create a new pie chart object.
     this.pie = new PieChart(width / 2, height / 2, width * 0.4);
 
+    this.barGraph = new BarGraph();
+
+    this.lineGraph = new LineGraph(this);
+
     this.draw = function() {
         if (!this.loaded) {
             console.log('Data not yet loaded');
             return;
         }
 
-        canvas_width = $("#app").width();
-        canvas_height = $("#app").height();
-        canvas_bottom_y = $("#app").position().top + canvas_height;
-        regionData = [];
-
-        // Get the value of the company we're interested in from the
-        // select item. Temporarily hard-code an example for now.
+        // Get the value of the region we're interested in from the selected item.
         var region = region_sel.value();
 
         // Get the column of raw data for companyName.
@@ -87,25 +89,14 @@ function AveragePriceByRegion(c) {
         }
 
         // create array and push the value in 3rd column ie 2nd index of the array into regionData
-        for(var i=0; i<rows.length; i++) {
-            regionData.push(rows[i].arr[2]);
-        }
+        myRegionData = sortRegionData(rows);
+        regionValue = myRegionData.regionValue;
+        regionData = myRegionData.regionData;
 
-        for(var i=0; i<regionData.length; i++) {
-            fill(0);
-            var x = map(i, 0, regionData.length, 0, canvas_width);
-            var h = map(regionData[i], 0, max(regionData),0, canvas_height);
-            
-            rect(x, canvas_bottom_y, canvas_width/regionData.length, -h);
-        }
+        var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
 
-        // Draw the pie chart!
-        /*
-        this.pie.draw(col, labels, colours, title);
-        for(var i=0; i<labels.length; i++) {
-            this.pie.makeLegendItem(labels, i);
-        }
-        */
+        this.lineGraph.draw(myMouseX, regionData, regionValue);
+        //this.barGraph.draw(regionData, regionValue);
     };
 
     this.snapshot = function(c) {
