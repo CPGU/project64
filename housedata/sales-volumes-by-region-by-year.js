@@ -73,7 +73,7 @@ function SalesVolumesByRegionByYear() {
     // Create a new pie chart object.
     this.pie = new PieChart(width / 2, height / 2, width * 0.4);
 
-    this.lineGraph = new LineGraph();
+    this.lineGraph = new LineGraph(this);
 
     this.draw = function() {
         if (!this.loaded) {

@@ -57,6 +57,10 @@ function AveragePriceByRegion() {
     // Create a new pie chart object.
     this.pie = new PieChart(width / 2, height / 2, width * 0.4);
 
+    this.barGraph = new BarGraph();
+
+    this.lineGraph = new LineGraph(this);
+
     this.draw = function() {
         if (!this.loaded) {
             console.log('Data not yet loaded');
@@ -74,20 +78,9 @@ function AveragePriceByRegion() {
         regionValue = myRegionData.regionValue;
         regionData = myRegionData.regionData;
 
-        for(var i=0; i<regionData.length; i++) {
-            fill(0);
-            var x = map(i, 0, regionData.length, 0, canvas_width);
-            var h = map(regionData[i].value, 0, max(regionValue),0, canvas_height);
-            
-            rect(x, canvas_bottom_y, canvas_width/regionData.length, -h);
-        }
+        var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
 
-        // Draw the pie chart!
-        /*
-        this.pie.draw(col, labels, colours, title);
-        for(var i=0; i<labels.length; i++) {
-            this.pie.makeLegendItem(labels, i);
-        }
-        */
+        this.lineGraph.draw(myMouseX, regionData, regionValue);
+        //this.barGraph.draw(regionData, regionValue);
     };
 }

@@ -1,4 +1,5 @@
-function LineGraph() {
+function LineGraph(object) {
+    this.object = object;
 
     this.draw = function(mouseXPos, dataList, valueList) {
 
@@ -36,15 +37,23 @@ function LineGraph() {
                 point(x, canvas_bottom_y + max_h);
                 push();
                 strokeWeight(1);
-                fill(255,255,0,230);
                 if(mouseX + 170 >= width) {
                     translate(mouseX-170, mouseY+10);
                 } else {
                     translate(mouseX+10, mouseY+10);
                 }
-                rect(0,0, 160, 60);
-                fill(0);
-                text("sales volume: " + dataList[i].value, 20,20);
+                // determine if average sales or sales volume data
+                if(this.object.name.includes('Sales')) {
+                    fill(255,255,0,230);
+                    rect(0,0, 160, 60);
+                    fill(0);
+                    text("sales volume: " + dataList[i].value, 20,20);
+                } else if(this.object.name.includes('Average')) {
+                    fill(255,255,0,230);
+                    rect(0,0, 200, 60);
+                    fill(0);
+                    text("average price: £" + Math.round(dataList[i].value * 100)/100, 20,20);
+                }
                 text("date: " + dataList[i].date, 20,50);
                 pop();
                 pop();
