@@ -61,6 +61,8 @@ function SalesVolumesByRegion() {
     // Create a new pie chart object.
     this.pie = new PieChart(width / 2, height / 2, width * 0.4);
 
+    this.lineGraph = new LineGraph();
+
     this.draw = function() {
         if (!this.loaded) {
             console.log('Data not yet loaded');
@@ -80,71 +82,7 @@ function SalesVolumesByRegion() {
         
         var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
 
-        beginShape();
-        for(var i=0; i<regionData.length; i++) {
-            //fill(0);
-            noFill();
-            var x = map(i, 0, regionData.length, 0, canvas_width);
-            var max_h = -map(regionData[i].value, 0, max(regionValue),0, canvas_height);
-            
-            //rect(x, canvas_bottom_y, canvas_width/regionData.length, max_h);
-            //
-            push()
-            var month = regionData[i].date.split('-')[1]
-            if(month == '01') {
-                stroke(255,0,0, 120);
-                line(x, canvas_bottom_y-60, x, 0);
-            } else {
-                stroke(255,0,0, 50);
-                line(x, canvas_bottom_y - 70, x, 0);
-            }
-            pop();
-            vertex(x, canvas_bottom_y + max_h);
-
-        }
-        endShape();
-
-        // create function for drawing data labels
-        for(var i=0; i<regionData.length; i++) {
-            var x = map(i, 0, regionData.length, 0, canvas_width);
-            var max_h = -map(regionData[i].value, 0, max(regionValue),0, canvas_height);
-            if(myMouseX < Math.round(x) + 2 && myMouseX > Math.round(x) - 2) {
-                push();
-                strokeWeight(8);
-                fill(0);
-                point(x, canvas_bottom_y + max_h);
-                push();
-                strokeWeight(1);
-                fill(255,255,0,230);
-                if(mouseX + 170 >= width) {
-                    translate(mouseX-170, mouseY+10);
-                } else {
-                    translate(mouseX+10, mouseY+10);
-                }
-                rect(0,0, 160, 60);
-                fill(0);
-                text("sales volume: " + regionData[i].value, 20,20);
-                text("date: " + regionData[i].date, 20,50);
-                pop();
-                pop();
-            }
-        }
-
-        line(mouseX, canvas_bottom_y, mouseX, 0);
-
-        for(var i=0; i<regionData.length; i+=12) {
-            var year = regionData[i].date.split('-')[0]
-            var x = map(i, 0, regionData.length, 0, canvas_width);
-            fill(0);
-            text(year, x, canvas_bottom_y - 100);
-        }
-
-        // Draw the pie chart!
-        /*
-        this.pie.draw(col, labels, colours, title);
-        for(var i=0; i<labels.length; i++) {
-            this.pie.makeLegendItem(labels, i);
-        }
-        */
+        // draw the linegraph
+        this.lineGraph.draw(myMouseX, regionData, regionValue); 
     };
 }
