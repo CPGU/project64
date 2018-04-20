@@ -10,6 +10,8 @@ function SalesVolumesByRegionByYear(c) {
     // Property to represent whether data has been loaded.
     this.loaded = false;
 
+    this.compare = false;
+
     // Preload the data. This function is called automatically by the
     // gallery when a visualisation is added.
     this.preload = function() {
@@ -65,11 +67,17 @@ function SalesVolumesByRegionByYear(c) {
 
         canvas_width = $("canvas").width();
         canvas_height = $("canvas").height();
-        canvas_bottom_y = $("canvas").position().top + canvas_height;
+        canvas_bottom_y = $("canvas").position().top + canvas_height - 80;
+        graph_bottom = canvas_bottom_y - height/50;
 
-        total = 0;
-        max_t = 0;
+        //comparison
+        createCompareCheckbox();
 
+        createRegionCompareDropdownMenu();
+        compare_region_sel.option('Please select a region to compare');
+        compare_region_sel.option('---');
+
+        fillDropdownMenu(regions, compare_region_sel);
     };
 
     this.destroy = function() {
@@ -79,9 +87,19 @@ function SalesVolumesByRegionByYear(c) {
     // Create a new pie chart object.
     this.pie = new PieChart(width / 2, height / 2, width * 0.4);
 
+    this.barGraph = new BarGraph();
+
     this.lineGraph = new LineGraph(this);
 
     this.draw = function() {
+        if(compareBox.checked()) {
+            this.compare = true;
+            compare_region_sel.show();
+        } else {
+            this.compare = false;
+            compare_region_sel.hide();
+        }
+
         if (!this.loaded) {
             console.log('Data not yet loaded');
             return;
@@ -89,12 +107,9 @@ function SalesVolumesByRegionByYear(c) {
 
         // Get the value of the region and year we're interested in from the
         // selected items.
-        region = region_sel.value();
-        year = year_sel.value();
-
-
-        // Get the rows of raw data for the selected region.
-        rows = this.data.findRows(region, 'Name');
+        var region = region_sel.value();
+        var year = year_sel.value();
+        var compare_region = compare_region_sel.value();
 
         if(region == "Please select a region") {
             
@@ -114,19 +129,34 @@ function SalesVolumesByRegionByYear(c) {
            }
         }
 
+        // Get the rows of raw data for the selected region.
+        var rows = this.data.findRows(region, 'Name');
+        var compare = this.data.findRows(compare_region, 'Name');
+
         // Filter rows to retain only items that include the selected year.
         rows = rows.filter(function(item) {
             return item.arr[0].includes(year);
         });
 
+        compare = compare.filter(function(item) {
+            return item.arr[0].includes(year);
+        });
+
         // create array and push the value in 3rd column ie 2nd index of the array into regionData
-        myRegionData = sortRegionData(rows);
-        regionValue = myRegionData.regionValue;
-        regionData = myRegionData.regionData;
+        var myRegionData = sortRegionData(rows);
+        var regionValue = myRegionData.regionValue;
+        var regionData = myRegionData.regionData;
 
         var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
 
-        this.lineGraph.draw(myMouseX, regionData, regionValue);
+        if(!this.compare) {
+            this.lineGraph.draw(myMouseX, regionData, regionValue);
+        } else {
+            var myCompareData = sortRegionData(compare);
+            var compareValue = myCompareData.regionValue;
+            var compareData = myCompareData.regionData;
+            this.lineGraph.draw(myMouseX, regionData, regionValue, compareData, compareValue); 
+        }
     };
 
     this.snapshot = function(c) {
