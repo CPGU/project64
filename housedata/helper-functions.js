@@ -33,6 +33,18 @@ function createRegionDropdownMenu() {
     region_sel.id('regionSelection');
 }
 
+function createCompareCheckbox() {
+    compareBox = createCheckbox('Compare', false);
+    compareBox.position(1000,100);
+}
+
+function createRegionCompareDropdownMenu() {
+    compare_region_sel = createSelect();
+    compare_region_sel.position(1000,150);
+    compare_region_sel.id('compareRegionSelection');
+    compare_region_sel.hide();
+}
+
 function createYearDropdownMenu() {
     year_sel = createSelect();
     year_sel.position(400,140);
@@ -76,4 +88,78 @@ function sortRegionData(items) {
     data.regionValue = regionValue;
     data.regionData = regionData;
     return data;
+}
+
+function drawLineGraph(data, value, range, r, g, b) {
+    push();
+    stroke(r, g, b);
+    beginShape();
+    for(var i=0; i<data.length; i++) {
+        //fill(0);
+        noFill();
+        var x = map(i, 0, data.length, 0, canvas_width);
+        var max_h = -map(data[i].value, 0, max(range),height/20, canvas_height-height/20);
+        vertex(x, canvas_bottom_y + max_h);
+    }
+    endShape();
+    pop();
+}
+
+function graphLines(data, x, i) {
+    push()
+    var month = data[i].date.split('-')[1]
+    if(month == '01') {
+        stroke(255,0,0, 120);
+    } else {
+        stroke(255,0,0, 50);
+    }
+    line(x, canvas_bottom_y, x, 0);
+    pop();
+}
+
+function drawLabel(object, i, data, compareData) {
+    push();
+    strokeWeight(1);
+    // determine if average sales or sales volume data
+    if(object.name.includes('Sales')) {
+        var labelTitle = "Sales Volume" + "\n";
+        var regionContext = region_sel.value() + ": " + data[i].value;
+        var labelContext = labelTitle + regionContext;
+        if(textWidth(labelTitle) >= textWidth(regionContext)) {
+            var maxLabelWidth = textWidth(labelTitle);
+        } else {
+            var maxLabelWidth = textWidth(regionContext);
+        }
+        if(object.compare) {
+            if(compareData.length > 0) {
+               var  compareContext = compare_region_sel.value() + ": " + compareData[i].value;
+                if(textWidth(compareContext) >= textWidth(labelTitle)) {
+                    if(textWidth(compareContext) >= textWidth(regionContext)) {
+                        var maxLabelWidth = textWidth(compareContext);
+                    }
+                }
+                labelContext += "\n" + compareContext;
+            }
+        }
+        var offset = maxLabelWidth/8; 
+        var rectWidth = maxLabelWidth+(offset*2);
+        // add elseif to translate label box if y is greater than canvas bottom y
+        if(mouseX + 10 + rectWidth >= width) {
+            translate(mouseX - 10 - rectWidth, mouseY+10);
+        } else {
+            translate(mouseX+10, mouseY+10);
+        }
+        fill(255,255,0,230);
+        rect(0,0, rectWidth, 60);
+        fill(0);
+        text(labelContext, offset, 20);
+        //text("sales volume for " + region_sel.value() + "\n" + dataList[i].value, 20,20);
+    } else if(object.name.includes('Average')) {
+        fill(255,255,0,230);
+        rect(0,0, 200, 60);
+        fill(0);
+        text("average price: £" + Math.round(data[i].value * 100)/100, 20,20);
+    }
+    //text("date: " + dataList[i].date, 20,50);
+    pop();
 }

@@ -47,7 +47,8 @@ function AveragePriceByRegion(c) {
 
         canvas_width = $("canvas").width();
         canvas_height = $("canvas").height();
-        canvas_bottom_y = $("canvas").position().top + canvas_height;
+        canvas_bottom_y = $("canvas").position().top + canvas_height - 80;
+        graph_bottom = canvas_bottom_y - height/50;
     };
 
     this.destroy = function() {

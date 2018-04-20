@@ -10,6 +10,8 @@ function SalesVolumesByRegion(c) {
     // Property to represent whether data has been loaded.
     this.loaded = false;
 
+    this.compare = false;
+
     // Preload the data. This function is called automatically by the
     // gallery when a visualisation is added.
     this.preload = function() {
@@ -48,15 +50,22 @@ function SalesVolumesByRegion(c) {
 
         canvas_width = $("canvas").width();
         canvas_height = $("canvas").height();
-        canvas_bottom_y = $("canvas").position().top + canvas_height;
+        canvas_bottom_y = $("canvas").position().top + canvas_height - 80;
+        graph_bottom = canvas_bottom_y - height/50;
         
+        //comparison
+        createCompareCheckbox();
+        createRegionCompareDropdownMenu();
+        compare_region_sel.option('Please select a region to compare');
+        compare_region_sel.option('---');
         
+        fillDropdownMenu(regions, compare_region_sel);
+
 
         total = 0;
         max_t = 0;
 
     };
-
 
     this.destroy = function() {
         removeElements();
@@ -68,6 +77,14 @@ function SalesVolumesByRegion(c) {
     this.lineGraph = new LineGraph(this);
 
     this.draw = function() {
+        if(compareBox.checked()) {
+            this.compare = true;
+            compare_region_sel.show();
+        } else {
+            this.compare = false;
+            compare_region_sel.hide();
+        }
+
         if (!this.loaded) {
             console.log('Data not yet loaded');
             return;
@@ -75,7 +92,7 @@ function SalesVolumesByRegion(c) {
 
         // Get the value of the region we're interested in from the selected item.
         region = region_sel.value();
-
+        compare_region = compare_region_sel.value();
 
         // Only displaying header label when a sel value has been selected.
         if(region == "Please select a region") {
@@ -97,17 +114,27 @@ function SalesVolumesByRegion(c) {
         // Get the rows of raw data for the selected region.
 
         rows = this.data.findRows(region, 'Name');
+        compare = this.data.findRows(compare_region, 'Name');
 
         // create array and push the value in 3rd column ie 2nd index of the array into regionData
         myRegionData = sortRegionData(rows);
         regionValue = myRegionData.regionValue;
         regionData = myRegionData.regionData;
         
+        
         var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
 
-
         // draw the linegraph
-        this.lineGraph.draw(myMouseX, regionData, regionValue); 
+        //this.lineGraph.draw(myMouseX, regionData, regionValue, compareData, compareValue); 
+
+        if(!this.compare) {
+            this.lineGraph.draw(myMouseX, regionData, regionValue); 
+        } else {
+            myCompareData = sortRegionData(compare);
+            compareValue = myCompareData.regionValue;
+            compareData = myCompareData.regionData;
+            this.lineGraph.draw(myMouseX, regionData, regionValue, compareData, compareValue); 
+        }
     };
 
     this.snapshot = function(c) {
