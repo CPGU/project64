@@ -122,7 +122,8 @@ function drawLabel(object, i, data, compareData) {
     strokeWeight(1);
     // determine if average sales or sales volume data
     if(object.name.includes('Sales')) {
-        var labelTitle = "Sales Volume" + "\n";
+        var date = data[i].date;
+        var labelTitle = "Sales Volume on " + date + "\n";
         var regionContext = region_sel.value() + ": " + data[i].value;
         var labelContext = labelTitle + regionContext;
         if(textWidth(labelTitle) >= textWidth(regionContext)) {
@@ -155,11 +156,39 @@ function drawLabel(object, i, data, compareData) {
         text(labelContext, offset, 20);
         //text("sales volume for " + region_sel.value() + "\n" + dataList[i].value, 20,20);
     } else if(object.name.includes('Average')) {
+        var date = data[i].date;
+        var labelTitle = "Average Price on " + date + "\n";
+        var regionContext = region_sel.value() + ": £" + Math.round(data[i].value * 100)/100;
+        var labelContext = labelTitle + regionContext;
+        if(textWidth(labelTitle) >= textWidth(regionContext)) {
+            var maxLabelWidth = textWidth(labelTitle);
+        } else {
+            var maxLabelWidth = textWidth(regionContext);
+        }
+        if(object.compare) {
+            if(compareData.length > 0) {
+               var  compareContext = compare_region_sel.value() + ": £" + Math.round(compareData[i].value * 100)/100;
+                if(textWidth(compareContext) >= textWidth(labelTitle)) {
+                    if(textWidth(compareContext) >= textWidth(regionContext)) {
+                        var maxLabelWidth = textWidth(compareContext);
+                    }
+                }
+                labelContext += "\n" + compareContext;
+            }
+        }
+        var offset = maxLabelWidth/8; 
+        var rectWidth = maxLabelWidth+(offset*2);
+        // add elseif to translate label box if y is greater than canvas bottom y
+        if(mouseX + 10 + rectWidth >= width) {
+            translate(mouseX - 10 - rectWidth, mouseY+10);
+        } else {
+            translate(mouseX+10, mouseY+10);
+        }
         fill(255,255,0,230);
-        rect(0,0, 200, 60);
+        rect(0,0, rectWidth, 60);
         fill(0);
-        text("average price: £" + Math.round(data[i].value * 100)/100, 20,20);
+        text(labelContext, offset, 20);
+        //text("sales volume for " + region_sel.value() + "\n" + dataList[i].value, 20,20);
     }
-    //text("date: " + dataList[i].date, 20,50);
     pop();
 }
