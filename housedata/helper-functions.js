@@ -122,8 +122,8 @@ function drawLabel(object, i, data, compareData) {
     strokeWeight(1);
     // determine if average sales or sales volume data
     if(object.name.includes('Sales')) {
-        var date = data[i].date;
-        var labelTitle = "Sales Volume on " + date + "\n";
+        var date = formatDate(data[i].date);
+        var labelTitle = "Sales Volume for " + date + "\n";
         var regionContext = region_sel.value() + ": " + data[i].value;
         var labelContext = labelTitle + regionContext;
         if(textWidth(labelTitle) >= textWidth(regionContext)) {
@@ -156,8 +156,8 @@ function drawLabel(object, i, data, compareData) {
         text(labelContext, offset, 20);
         //text("sales volume for " + region_sel.value() + "\n" + dataList[i].value, 20,20);
     } else if(object.name.includes('Average')) {
-        var date = data[i].date;
-        var labelTitle = "Average Price on " + date + "\n";
+        var date = formatDate(data[i].date);
+        var labelTitle = "Average Price for " + date + "\n";
         var regionContext = region_sel.value() + ": £" + Math.round(data[i].value * 100)/100;
         var labelContext = labelTitle + regionContext;
         if(textWidth(labelTitle) >= textWidth(regionContext)) {
@@ -191,4 +191,22 @@ function drawLabel(object, i, data, compareData) {
         //text("sales volume for " + region_sel.value() + "\n" + dataList[i].value, 20,20);
     }
     pop();
+}
+
+function formatDate(rawDate) {
+    var splitDate = rawDate.split('-');
+    return {
+        '01': 'January',
+        '02': 'February',
+        '03': 'March',
+        '04': 'April',
+        '05': 'May',
+        '06': 'June',
+        '07': 'July',
+        '08': 'August',
+        '09': 'September',
+        '10': 'October',
+        '11': 'November',
+        '12': 'December',
+    }[splitDate[1]] + " " + splitDate[0];
 }
