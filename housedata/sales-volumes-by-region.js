@@ -60,11 +60,6 @@ function SalesVolumesByRegion(c) {
         compare_region_sel.option('---');
         
         fillDropdownMenu(regions, compare_region_sel);
-
-
-        total = 0;
-        max_t = 0;
-
     };
 
     this.destroy = function() {
@@ -73,6 +68,8 @@ function SalesVolumesByRegion(c) {
 
     // Create a new pie chart object.
     this.pie = new PieChart(width / 2, height / 2, width * 0.4);
+
+    this.barGraph = new BarGraph();
 
     this.lineGraph = new LineGraph(this);
 
@@ -91,8 +88,8 @@ function SalesVolumesByRegion(c) {
         }
 
         // Get the value of the region we're interested in from the selected item.
-        region = region_sel.value();
-        compare_region = compare_region_sel.value();
+        var region = region_sel.value();
+        var compare_region = compare_region_sel.value();
 
         // Only displaying header label when a sel value has been selected.
         if(region == "Please select a region") {
@@ -109,17 +106,14 @@ function SalesVolumesByRegion(c) {
             button.mousePressed(this.snapshot);
         }
 
-        // Get the column of raw data for companyName.
-
-        // Get the rows of raw data for the selected region.
-
-        rows = this.data.findRows(region, 'Name');
-        compare = this.data.findRows(compare_region, 'Name');
+        // Get the rows of raw data for the selected region and compare region.
+        var rows = this.data.findRows(region, 'Name');
+        var compare = this.data.findRows(compare_region, 'Name');
 
         // create array and push the value in 3rd column ie 2nd index of the array into regionData
-        myRegionData = sortRegionData(rows);
-        regionValue = myRegionData.regionValue;
-        regionData = myRegionData.regionData;
+        var myRegionData = sortRegionData(rows);
+        var regionValue = myRegionData.regionValue;
+        var regionData = myRegionData.regionData;
         
         
         var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
@@ -130,9 +124,9 @@ function SalesVolumesByRegion(c) {
         if(!this.compare) {
             this.lineGraph.draw(myMouseX, regionData, regionValue); 
         } else {
-            myCompareData = sortRegionData(compare);
-            compareValue = myCompareData.regionValue;
-            compareData = myCompareData.regionData;
+            var myCompareData = sortRegionData(compare);
+            var compareValue = myCompareData.regionValue;
+            var compareData = myCompareData.regionData;
             this.lineGraph.draw(myMouseX, regionData, regionValue, compareData, compareValue); 
         }
     };
