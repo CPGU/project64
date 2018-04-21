@@ -66,13 +66,6 @@ function AveragePriceByRegionByYear(c) {
         }
         year_sel.changed(this.draw);
 
-        canvas_width = $("canvas").width();
-        canvas_height = $("canvas").height();
-        canvas_bottom_y = $("canvas").position().top + canvas_height;
-
-        total = 0;
-        max_t = 0;
-
     };
 
     this.destroy = function() {

@@ -49,11 +49,6 @@ function OverallRegionData(c) {
 
         region_sel.changed(this.resetCounts, this.draw);
 
-        canvas_width = $("canvas").width();
-        canvas_height = $("canvas").height();
-        canvas_bottom_y = $("canvas").position().top + canvas_height - 80;
-        graph_bottom = canvas_bottom_y - height/50;
-
         //add comparison
         //
         //
@@ -107,8 +102,8 @@ function OverallRegionData(c) {
         } else {
             var overallSpendText = "Total spend from Jan 1995 to Jan 2016: ";
             text(overallSpendText, width/6, height/6);
-            if(currentOverallAmount + Math.round(totalSpend/240*100)/100 < totalSpend) {
-                currentOverallAmount += Math.round(totalSpend/240*100)/100;
+            if(currentOverallAmount + Math.round(totalSpend/60*100)/100 < totalSpend) {
+                currentOverallAmount += Math.round(totalSpend/60*100)/100;
             } else {
                 currentOverallAmount = totalSpend;
             }
@@ -117,8 +112,8 @@ function OverallRegionData(c) {
             var yearlyAvgText = "Yearly Avg: ";
             text(yearlyAvgText ,width/6, height/6+textAscent()*2);
             var yearly = Math.round(totalSpend/20*100)/100;
-            if(currentYearlyAmount + Math.round(yearly/240*100)/100 < yearly) {
-                currentYearlyAmount += Math.round(yearly/240*100)/100;
+            if(currentYearlyAmount + Math.round(yearly/60*100)/100 < yearly) {
+                currentYearlyAmount += Math.round(yearly/60*100)/100;
             } else {
                 currentYearlyAmount = yearly;
             }
@@ -127,8 +122,8 @@ function OverallRegionData(c) {
             var monthlyAvgText = "Monthly Avg: ";
             text(monthlyAvgText, width/6, height/6+textAscent()*4);
             var monthly = Math.round(totalSpend/240*100)/100;
-            if(currentMonthlyAmount + Math.round(monthly/240*100)/100 < monthly) {
-                currentMonthlyAmount += Math.round(monthly/240*100)/100;
+            if(currentMonthlyAmount + Math.round(monthly/60*100)/100 < monthly) {
+                currentMonthlyAmount += Math.round(monthly/60*100)/100;
             } else {
                 currentMonthlyAmount = monthly;
             }
@@ -141,7 +136,7 @@ function OverallRegionData(c) {
         } else {
             push();
             textSize(32);
-            text(region, 10, 30);
+            text(region, width/2-textWidth(region)/2, 30);
             pop();
 
             button = createButton("Snapshot <i class='fa fa-camera'></i>");

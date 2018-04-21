@@ -19,6 +19,10 @@ function setup() {
     gallery.addFigure(new AveragePriceByRegionByYear(c));
     gallery.addFigure(new OverallRegionData(c));
     
+    canvas_width = $("canvas").width();
+    canvas_height = $("canvas").height();
+    canvas_bottom_y = $("canvas").position().top + canvas_height - 80;
+    graph_bottom = canvas_bottom_y - height/50;
 }
 
 function draw() {

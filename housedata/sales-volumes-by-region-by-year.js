@@ -65,11 +65,6 @@ function SalesVolumesByRegionByYear(c) {
         fillDropdownMenu(yearList, year_sel);
         year_sel.changed(this.draw);
 
-        canvas_width = $("canvas").width();
-        canvas_height = $("canvas").height();
-        canvas_bottom_y = $("canvas").position().top + canvas_height - 80;
-        graph_bottom = canvas_bottom_y - height/50;
-
         //comparison
         createCompareCheckbox();
 
