@@ -124,7 +124,7 @@ function drawLabel(object, i, data, compareData) {
     if(object.name.includes('Sales')) {
         var date = formatDate(data[i].date);
         var labelTitle = "Sales Volume for " + date + "\n";
-        var regionContext = region_sel.value() + ": " + data[i].value;
+        var regionContext = region_sel.value() + ": " + formatNumber(data[i].value);
         var labelContext = labelTitle + regionContext;
         if(textWidth(labelTitle) >= textWidth(regionContext)) {
             var maxLabelWidth = textWidth(labelTitle);
@@ -133,7 +133,7 @@ function drawLabel(object, i, data, compareData) {
         }
         if(object.compare) {
             if(compareData.length > 0) {
-               var  compareContext = compare_region_sel.value() + ": " + compareData[i].value;
+               var  compareContext = compare_region_sel.value() + ": " + formatNumber(compareData[i].value);
                 if(textWidth(compareContext) >= textWidth(labelTitle)) {
                     if(textWidth(compareContext) >= textWidth(regionContext)) {
                         var maxLabelWidth = textWidth(compareContext);
@@ -158,7 +158,7 @@ function drawLabel(object, i, data, compareData) {
     } else if(object.name.includes('Average')) {
         var date = formatDate(data[i].date);
         var labelTitle = "Average Price for " + date + "\n";
-        var regionContext = region_sel.value() + ": £" + Math.round(data[i].value * 100)/100;
+        var regionContext = region_sel.value() + ": £" + formatNumber(Math.round(data[i].value * 100)/100);
         var labelContext = labelTitle + regionContext;
         if(textWidth(labelTitle) >= textWidth(regionContext)) {
             var maxLabelWidth = textWidth(labelTitle);
@@ -167,7 +167,7 @@ function drawLabel(object, i, data, compareData) {
         }
         if(object.compare) {
             if(compareData.length > 0) {
-               var  compareContext = compare_region_sel.value() + ": £" + Math.round(compareData[i].value * 100)/100;
+               var  compareContext = compare_region_sel.value() + ": £" + formatNumber(Math.round(compareData[i].value * 100)/100);
                 if(textWidth(compareContext) >= textWidth(labelTitle)) {
                     if(textWidth(compareContext) >= textWidth(regionContext)) {
                         var maxLabelWidth = textWidth(compareContext);
@@ -212,5 +212,5 @@ function formatDate(rawDate) {
 }
 
 function formatNumber(number) {
-    return number.toLocaleString('en');
+    return Number(number).toLocaleString('en');
 }
