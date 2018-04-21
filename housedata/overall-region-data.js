@@ -56,8 +56,6 @@ function OverallRegionData() {
         currentYearlyAmount = 0;
         currentOverallAmount = 0;
 
-        createSnapshotButton(this);
-
         overallInfoDiv = createElement("div");
         overallInfoDiv.id("overallInfo");
         overallInfoDiv.parent("app");
@@ -147,8 +145,6 @@ function OverallRegionData() {
             }
             $("#monthlySpendAmount").text("£" + formatNumber(currentMonthlyAmount));
         }
-
-        toggleSnapshotDisplay(region);
 
         // Only displaying header label when a sel value has been selected.
         if(region != "Please select a region" && region != "---") {
