@@ -1,4 +1,4 @@
-function OverallRegionData(c) {
+function OverallRegionData() {
     this.name = 'Overall Region Data';
 
     this.id = 'overall-region-data';
@@ -57,6 +57,31 @@ function OverallRegionData(c) {
         currentOverallAmount = 0;
 
         createSnapshotButton(this);
+
+        overallInfoDiv = createElement("div");
+        overallInfoDiv.id("overallInfo");
+        overallInfoDiv.parent("app");
+
+        overallSpendText = createP("Total spend from Jan 1995 to Jan 2016: ");
+        overallSpendText.parent("overallInfo");
+
+        overallSpendAmount = createElement("p");
+        overallSpendAmount.id("overallSpendAmount");
+        overallSpendAmount.parent("overallInfo");
+
+        yearlyAvgText = createP("Yearly Avg: ");
+        yearlyAvgText.parent("overallInfo");
+
+        yearlySpendAmount = createElement("p");
+        yearlySpendAmount.id("yearlySpendAmount");
+        yearlySpendAmount.parent("overallInfo");
+
+        monthlyAvgText = createP("Monthly Avg: ");
+        monthlyAvgText.parent("overallInfo");
+
+        monthlySpendAmount = createElement("p");
+        monthlySpendAmount.id("monthlySpendAmount");
+        monthlySpendAmount.parent("overallInfo");
     };
 
     this.resetCounts = function() {
@@ -93,41 +118,34 @@ function OverallRegionData(c) {
             console.log("Data not yet loaded");
             return;
         }
-        //this.salesVolumeTotal();
-        //this.averagePriceTotal();
+
         this.totalSpend();
 
         var region = region_sel.value();
         if(region == "Please select a region" || region == "---") {
         } else {
-            var overallSpendText = "Total spend from Jan 1995 to Jan 2016: ";
-            text(overallSpendText, width/6, height/6);
-            if(currentOverallAmount + Math.round(totalSpend/60*100)/100 < totalSpend) {
-                currentOverallAmount += Math.round(totalSpend/60*100)/100;
+            if(currentOverallAmount + Math.round(totalSpend/120*100)/100 < totalSpend) {
+                currentOverallAmount += Math.round(totalSpend/120*100)/100;
             } else {
                 currentOverallAmount = totalSpend;
             }
-            var overallSpendAmount = text("£" + formatNumber(currentOverallAmount), width/6+textWidth(overallSpendText), height/6);
+            $("#overallSpendAmount").text("£" + formatNumber(currentOverallAmount));
 
-            var yearlyAvgText = "Yearly Avg: ";
-            text(yearlyAvgText ,width/6, height/6+textAscent()*2);
             var yearly = Math.round(totalSpend/20*100)/100;
-            if(currentYearlyAmount + Math.round(yearly/60*100)/100 < yearly) {
-                currentYearlyAmount += Math.round(yearly/60*100)/100;
+            if(currentYearlyAmount + Math.round(yearly/120*100)/100 < yearly) {
+                currentYearlyAmount += Math.round(yearly/120*100)/100;
             } else {
                 currentYearlyAmount = yearly;
             }
-            var yearlyAvgAmount = text("£" + formatNumber(currentYearlyAmount), width/6+textWidth(yearlyAvgText), height/6+textAscent()*2);
+            $("#yearlySpendAmount").text("£" + formatNumber(currentYearlyAmount));
 
-            var monthlyAvgText = "Monthly Avg: ";
-            text(monthlyAvgText, width/6, height/6+textAscent()*4);
             var monthly = Math.round(totalSpend/240*100)/100;
-            if(currentMonthlyAmount + Math.round(monthly/60*100)/100 < monthly) {
-                currentMonthlyAmount += Math.round(monthly/60*100)/100;
+            if(currentMonthlyAmount + Math.round(monthly/120*100)/100 < monthly) {
+                currentMonthlyAmount += Math.round(monthly/120*100)/100;
             } else {
                 currentMonthlyAmount = monthly;
             }
-            var monthlyAvgAmount = text("£" + formatNumber(currentMonthlyAmount),width/6+textWidth(monthlyAvgText),height/6+textAscent()*4);
+            $("#monthlySpendAmount").text("£" + formatNumber(currentMonthlyAmount));
         }
 
         toggleSnapshotDisplay(region);
@@ -140,8 +158,4 @@ function OverallRegionData(c) {
             pop();
         }
     };
-
-    this.snapshot = function(c) {
-        saveCanvas(this.c, 'Test', 'png');
-    }
 }

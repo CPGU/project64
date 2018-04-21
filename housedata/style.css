@@ -32,6 +32,14 @@
     position: absolute; left: 0px; top: 68px;
 }
 
+/* change the values here -- just for testing -- */
+#overallInfo {
+    height: 30vh;
+    left: 30vw;
+    top: 20vh;
+    position: absolute;
+}
+
 #navbar ul {
     list-style-type: none;
     margin: 0;

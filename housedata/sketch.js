@@ -17,11 +17,11 @@ function setup() {
     gallery = new Gallery();
 
     // Add the data visualisation objects here.
+    gallery.addFigure(new OverallRegionData(c));
     gallery.addFigure(new SalesVolumesByRegion(c));
     gallery.addFigure(new AveragePriceByRegion(c));
     gallery.addFigure(new SalesVolumesByRegionByYear(c));
     gallery.addFigure(new AveragePriceByRegionByYear(c));
-    gallery.addFigure(new OverallRegionData(c));
 }
 
 function draw() {
