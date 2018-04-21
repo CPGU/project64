@@ -54,6 +54,8 @@ function AveragePriceByRegion(c) {
         compare_region_sel.option('---');
         
         fillDropdownMenu(regions, compare_region_sel);
+
+        createSnapshotButton(this);
     };
 
     this.destroy = function() {
@@ -85,19 +87,14 @@ function AveragePriceByRegion(c) {
         var region = region_sel.value();
         var compare_region = compare_region_sel.value();
 
+        toggleSnapshotDisplay(region);
+
         // Only displaying header label when a sel value has been selected.
-        if(region == "Please select a region") {
-            
-        } else {
+        if(region != "Please select a region" && region != "---") {
             push();
             textSize(32);
             text(region, 10, 30);
             pop();
-
-            button = createButton("Snapshot <i class='fa fa-camera'></i>");
-            button.position(400,140);
-            button.id('snapshot');
-            button.mousePressed(this.snapshot);
         }
 
         // Get the rows of raw data for the selected region and compare region.

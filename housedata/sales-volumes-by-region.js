@@ -10,6 +10,7 @@ function SalesVolumesByRegion(c) {
     // Property to represent whether data has been loaded.
     this.loaded = false;
 
+    // Property to represent whether the user has selected a comparison value.
     this.compare = false;
 
     // Preload the data. This function is called automatically by the
@@ -55,6 +56,8 @@ function SalesVolumesByRegion(c) {
         compare_region_sel.option('---');
         
         fillDropdownMenu(regions, compare_region_sel);
+
+        createSnapshotButton(this);
     };
 
     this.destroy = function() {
@@ -86,19 +89,15 @@ function SalesVolumesByRegion(c) {
         var region = region_sel.value();
         var compare_region = compare_region_sel.value();
 
+        // toggle snapshot display
+        toggleSnapshotDisplay(region);
+
         // Only displaying header label when a sel value has been selected.
-        if(region == "Please select a region") {
-            
-        } else {
+        if(region != "Please select a region" && region != "---") {
             push();
             textSize(32);
             text(region, 10, 30);
             pop();
-
-            button = createButton("Snapshot <i class='fa fa-camera'></i>");
-            button.id('snapshot')
-            button.position(400,140);
-            button.mousePressed(this.snapshot);
         }
 
         // Get the rows of raw data for the selected region and compare region.

@@ -1,54 +1,29 @@
-function sum(data) {
-  var total = 0;
-
-  for (let i = 0; i < data.length; i++) {
-    total = total + data[i];
-  }
-
-  return total;
-}
-
-function sliceRowNumbers (row, start=0, end) {
-  var rowData = [];
-
-  if (!end) {
-    // Parse all values until the end of the row.
-    end = row.arr.length;
-  }
-
-  for (i = start; i < end; i++) {
-    rowData.push(row.getNum(i));
-  }
-
-  return rowData;
-}
-
 function stringsToNumbers (array) {
   return array.map(Number);
 }
 
 function createRegionDropdownMenu() {
     region_sel = createSelect();
-    region_sel.position(400,100);
+    region_sel.parent('region-select');
     region_sel.id('regionSelection');
 }
 
 function createCompareCheckbox() {
     compareBox = createCheckbox('Compare', false);
-    compareBox.position(1000,100);
+    compareBox.parent('compare-box');
 }
 
 function createRegionCompareDropdownMenu() {
     compare_region_sel = createSelect();
-    compare_region_sel.position(1000,150);
+    compare_region_sel.parent('compare-region-select');
     compare_region_sel.id('compareRegionSelection');
     compare_region_sel.hide();
 }
 
 function createYearDropdownMenu() {
     year_sel = createSelect();
-    year_sel.position(400,140);
-    year_sel.id('regionSelection');
+    year_sel.parent('year-select');
+    year_sel.id('yearSelection');
 }
 
 function removeRegionDuplicates(items) {
@@ -123,74 +98,82 @@ function drawLabel(object, i, data, compareData) {
     // determine if average sales or sales volume data
     if(object.name.includes('Sales')) {
         var date = formatDate(data[i].date);
-        var labelTitle = "Sales Volume for " + date + "\n";
+        var labelTitle = "Sales Volume for " + date;
         var regionContext = region_sel.value() + ": " + formatNumber(data[i].value);
-        var labelContext = labelTitle + regionContext;
-        if(textWidth(labelTitle) >= textWidth(regionContext)) {
-            var maxLabelWidth = textWidth(labelTitle);
-        } else {
-            var maxLabelWidth = textWidth(regionContext);
-        }
-        if(object.compare) {
-            if(compareData.length > 0) {
-               var  compareContext = compare_region_sel.value() + ": " + formatNumber(compareData[i].value);
-                if(textWidth(compareContext) >= textWidth(labelTitle)) {
-                    if(textWidth(compareContext) >= textWidth(regionContext)) {
-                        var maxLabelWidth = textWidth(compareContext);
-                    }
-                }
-                labelContext += "\n" + compareContext;
-            }
-        }
+        var compareContext = getCompareContext(object, compareData, i);
+        var maxLabelWidth = getMaxLabelWidth(object, labelTitle, regionContext, compareContext);
         var offset = maxLabelWidth/8; 
         var rectWidth = maxLabelWidth+(offset*2);
         // add elseif to translate label box if y is greater than canvas bottom y
-        if(mouseX + 10 + rectWidth >= width) {
-            translate(mouseX - 10 - rectWidth, mouseY+10);
-        } else {
-            translate(mouseX+10, mouseY+10);
-        }
+        checkLabelBoundaries(rectWidth);
         fill(255,255,0,230);
-        rect(0,0, rectWidth, 60);
-        fill(0);
-        text(labelContext, offset, 20);
-        //text("sales volume for " + region_sel.value() + "\n" + dataList[i].value, 20,20);
+        setLabelBoxHeight(object, compareData, rectWidth);
+        renderLabelContext(object, compareData, labelTitle, regionContext, compareContext, offset);
     } else if(object.name.includes('Average')) {
         var date = formatDate(data[i].date);
-        var labelTitle = "Average Price for " + date + "\n";
+        var labelTitle = "Average Price for " + date;
         var regionContext = region_sel.value() + ": £" + formatNumber(Math.round(data[i].value * 100)/100);
-        var labelContext = labelTitle + regionContext;
-        if(textWidth(labelTitle) >= textWidth(regionContext)) {
-            var maxLabelWidth = textWidth(labelTitle);
-        } else {
-            var maxLabelWidth = textWidth(regionContext);
-        }
-        if(object.compare) {
-            if(compareData.length > 0) {
-               var  compareContext = compare_region_sel.value() + ": £" + formatNumber(Math.round(compareData[i].value * 100)/100);
-                if(textWidth(compareContext) >= textWidth(labelTitle)) {
-                    if(textWidth(compareContext) >= textWidth(regionContext)) {
-                        var maxLabelWidth = textWidth(compareContext);
-                    }
-                }
-                labelContext += "\n" + compareContext;
-            }
-        }
+        var compareContext = getCompareContext(object, compareData, i);
+        var maxLabelWidth = getMaxLabelWidth(object, labelTitle, regionContext, compareContext);
         var offset = maxLabelWidth/8; 
         var rectWidth = maxLabelWidth+(offset*2);
         // add elseif to translate label box if y is greater than canvas bottom y
-        if(mouseX + 10 + rectWidth >= width) {
-            translate(mouseX - 10 - rectWidth, mouseY+10);
-        } else {
-            translate(mouseX+10, mouseY+10);
-        }
+        checkLabelBoundaries(rectWidth);
         fill(255,255,0,230);
-        rect(0,0, rectWidth, 60);
-        fill(0);
-        text(labelContext, offset, 20);
-        //text("sales volume for " + region_sel.value() + "\n" + dataList[i].value, 20,20);
+        setLabelBoxHeight(object, compareData, rectWidth);
+        renderLabelContext(object, compareData, labelTitle, regionContext, compareContext, offset);
     }
     pop();
+}
+
+function getCompareContext(object, compareData, i) {
+    if(object.compare && compareData.length > 0) {
+        var compareContext = compare_region_sel.value() + ": " + formatNumber(compareData[i].value);
+    }
+    return compareContext
+}
+
+function getMaxLabelWidth(object, title, region, compare) {
+    if(textWidth(title) >= textWidth(region)) {
+        var maxLabelWidth = textWidth(title);
+    } else {
+        var maxLabelWidth = textWidth(region);
+    }
+    if(compare !== undefined) {
+        if(textWidth(compare) >= textWidth(title)) {
+            if(textWidth(compare) >= textWidth(region)) {
+                var maxLabelWidth = textWidth(compare);
+            }
+        }
+    }
+    return maxLabelWidth;
+}
+
+function checkLabelBoundaries(rectWidth) {
+    if(mouseX + 10 + rectWidth >= width) {
+        translate(mouseX - 10 - rectWidth, mouseY+10);
+    } else {
+        translate(mouseX+10, mouseY+10);
+    }
+}
+
+function setLabelBoxHeight(object, compareData, rectWidth) {
+    if(object.compare && compareData.length > 0) {
+        rect(0,0, rectWidth, height/15+textAscent()*3);
+    } else {
+        rect(0,0, rectWidth, height/15+textAscent());
+    }
+}
+
+function renderLabelContext(object, compareData, title, region, compare, offset) {
+    fill(0);
+    textStyle(BOLD);
+    text(title, offset, 20);
+    textStyle(NORMAL);
+    text(region, offset, height/30+textAscent()*2);
+    if(object.compare && compareData.length > 0) {
+        text(compare, offset, height/30+textAscent()*4);
+    }
 }
 
 function formatDate(rawDate) {
@@ -213,4 +196,27 @@ function formatDate(rawDate) {
 
 function formatNumber(number) {
     return Number(number).toLocaleString('en');
+}
+
+function createSnapshotButton(object) {
+    var button = createButton("Snapshot <i class='fa fa-camera'></i>");
+    button.id('snapshot')
+    button.parent('snapshot-button');
+    button.mousePressed(object.snapshot);
+}
+
+function toggleSnapshotDisplay(region, year) {
+    if(year === undefined) {
+        if(region != "Please select a region" && region != "---") {
+            $('#snapshot-button').show();
+        } else {
+            $('#snapshot-button').hide();
+        }
+    } else {
+        if(region != "Please select a region" && region != "---" && year != "Please select a year" && year != "---") {
+            $('#snapshot-button').show();
+        } else {
+            $('#snapshot-button').hide();
+        }
+    }
 }

@@ -50,13 +50,13 @@ function OverallRegionData(c) {
         region_sel.changed(this.resetCounts, this.draw);
 
         //add comparison
-        //
-        //
         whileCount = 0;
         totalSpend = 0;
         currentMonthlyAmount = 0;
         currentYearlyAmount = 0;
         currentOverallAmount = 0;
+
+        createSnapshotButton(this);
     };
 
     this.resetCounts = function() {
@@ -130,21 +130,15 @@ function OverallRegionData(c) {
             var monthlyAvgAmount = text("£" + formatNumber(currentMonthlyAmount),width/6+textWidth(monthlyAvgText),height/6+textAscent()*4);
         }
 
+        toggleSnapshotDisplay(region);
+
         // Only displaying header label when a sel value has been selected.
-        if(region == "Please select a region") {
-            
-        } else {
+        if(region != "Please select a region" && region != "---") {
             push();
             textSize(32);
             text(region, width/2-textWidth(region)/2, 30);
             pop();
-
-            button = createButton("Snapshot <i class='fa fa-camera'></i>");
-            button.position(400,140);
-            button.id('snapshot');
-            button.mousePressed(this.snapshot);
         }
-
     };
 
     this.snapshot = function(c) {

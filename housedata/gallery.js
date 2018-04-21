@@ -6,10 +6,9 @@ function Gallery() {
   // Add a new figure to the navigation bar.
   this.addFigure = function(fig) {
 
-    // Check that the object fig has a name.
+    // Check that the object fig has a name and id.
     if (!fig.hasOwnProperty('id')
-        && !fig.hasOwnProperty('name')) {
-      // TODO: Check name is unique.
+        || !fig.hasOwnProperty('name')) {
       alert('Make sure your figure has an id and name!');
     }
 

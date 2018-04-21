@@ -73,6 +73,8 @@ function SalesVolumesByRegionByYear(c) {
         compare_region_sel.option('---');
 
         fillDropdownMenu(regions, compare_region_sel);
+
+        createSnapshotButton(this);
     };
 
     this.destroy = function() {
@@ -106,22 +108,14 @@ function SalesVolumesByRegionByYear(c) {
         var year = year_sel.value();
         var compare_region = compare_region_sel.value();
 
-        if(region == "Please select a region") {
-            
-        } else {
-           if(year == "Please select a year") {
+        // toggle snapshot display
+        toggleSnapshotDisplay(region, year);
 
-           } else {
+        if(region != "Please select a region" && region != "---" && year != "Please select a year" && year != "---") {
             push();
             textSize(32);
             text(region, 10, 30);
             pop();
-
-            button = createButton("Snapshot <i class='fa fa-camera'></i>");
-            button.position(400,180);
-            button.id('snapshot');
-            button.mousePressed(this.snapshot);
-           }
         }
 
         // Get the rows of raw data for the selected region.
