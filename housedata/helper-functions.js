@@ -210,3 +210,7 @@ function formatDate(rawDate) {
         '12': 'December',
     }[splitDate[1]] + " " + splitDate[0];
 }
+
+function formatNumber(number) {
+    return number.toLocaleString('en');
+}
