@@ -10,6 +10,9 @@ function AveragePriceByRegionByYear(c) {
     // Property to represent whether data has been loaded.
     this.loaded = false;
 
+    // Property to represent whether the user has selected a comparison value.
+    this.compare = false;
+
     // Preload the data. This function is called automatically by the
     // gallery when a visualisation is added.
     this.preload = function() {
@@ -24,48 +27,88 @@ function AveragePriceByRegionByYear(c) {
     };
 
     this.setup = function() {
+        // basic conditional to determine whether the preload data has been loaded or not.
+        // if not, user is shown a loading message currently in the console
         if (!this.loaded) {
           console.log('Data not yet loaded');
           return;
         }
 
-        // Create a select DOM element.
-        region_sel = createSelect();
-        region_sel.position(400,100);
-        region_sel.id("regionSelection");
+        // Create a region select DOM element.
+        createRegionDropdownMenu();
 
-        // Fill the options with all region names.
+        // create a variable and assign it the column with header 'name' from the this.data table
         var regions = this.data.getColumn('Name');
-        regions = new Set(regions);
-        regions = Array.from(regions);
+
+        // call function to remove duplicate region names.
+        regions = removeRegionDuplicates(regions);
+
+        // Set default option
         region_sel.option('Please select a region');
-        region_sel.option('');
-        for(var i=1; i<regions.length; i++) {
-            region_sel.option(regions[i]);
-        }
+        region_sel.option('---');
+
+        // fill the dropdown menu with region options
+        fillDropdownMenu(regions, region_sel);
+
+        // when region_sel is changed, call this.resetCount and then this.draw
         region_sel.changed(this.draw);
 
         // Create a year select DOM element
-        year_sel = createSelect();
-        year_sel.position(400,140);
-        year_sel.id("regionSelection");
+        createYearDropdownMenu();
 
-        // Fill the options with all years.
-        var years = this.data.getColumn('Date');
-        let yearSet = new Set();
-        
-        for(var i=0; i<years.length; i++) {
-            yearSet.add(years[i].split('-')[0]);
-
-        }
-        var yearList = Array.from(yearSet);
+        // Set default option
         year_sel.option('Please select a year');
-        year_sel.option('');
-        for(var i=0; i<yearList.length; i++) {
-            year_sel.option(yearList[i]);
-        }
-        year_sel.changed(this.draw);
+        year_sel.option('---');
 
+        // create a variable and assign it the column with header 'Date' from the this.data table
+        var years = this.data.getColumn('Date');
+
+        // call function to remove duplicate years.
+        var yearList = removeYearDuplicates(years);
+
+        // fill the dropdown menu with years options
+        fillDropdownMenu(yearList, year_sel);
+
+        // when year_sel is changed, call this.resetCount and then this.draw
+        year_sel.changed(this.resetCount, this.draw);
+        
+        //comparison
+        // call functions to create a Compare check box and a dropdown menu.
+        createCompareCheckbox();
+        createRegionCompareDropdownMenu();
+
+        // set default options
+        compare_region_sel.option('Please select a region to compare');
+        compare_region_sel.option('---');
+
+        // fill the compare year sel dropdown menu with options
+        fillDropdownMenu(regions, compare_region_sel);
+
+        // when compare_year_sel is changed, call this.compareResetCount and this.draw
+        compare_region_sel.changed(this.compareResetCount, this.draw);
+
+        // function call to create a snapshot button
+        createSnapshotButton(this);
+
+        // global variables to be used in draw
+        // tempDataCount and compareTempDataCount are used as a incrementor for the graph animation.
+        // tempData and compareTempData are used to fill with multiple objects initalised with one property of value 0
+        tempData = [];
+        tempDataCount = 0;
+        compareTempData = [];
+        compareTempDataCount = 0;
+    };
+
+    // when called, this method resets the value of tempData to an empty array and tempDataCount to 0
+    this.resetCount = function() {
+        tempData = [];
+        tempDataCount = 0;
+    };
+
+    // when called, this method resets the value of compareResetData to an empty array and compareTempDataCount to 0
+    this.compareResetCount = function() {
+        compareTempData = [];
+        compareTempDataCount = 0;
     };
 
     this.destroy = function() {
@@ -73,126 +116,92 @@ function AveragePriceByRegionByYear(c) {
     };
 
     // Create a new pie chart object.
+    // unused at the moment
     this.pie = new PieChart(width / 2, height / 2, width * 0.4);
 
+    // Create a new pie chart object.
+    // unused at the moment
+    this.barGraph = new BarGraph();
+
+    // this property is assigned a new Line Graph object
+    this.lineGraph = new LineGraph(this);
+
     this.draw = function() {
+        // toggle this.compare between true and false
+        // this checks to see if the user has selected the compare option or not
+        // if the user selects the compare option, then a dropdown menu appears
+        if(compareBox.checked()) {
+            this.compare = true;
+            compare_region_sel.show();
+        } else {
+            this.compare = false;
+            compare_region_sel.hide();
+        }
+
+        // basic conditional to determine whether the preload data has been loaded or not.
+        // if not, user is shown a loading message currently in the console
         if (!this.loaded) {
             console.log('Data not yet loaded');
             return;
         }
 
-        regionData = [];
+        // Get the value of the region and year we're interested in from the selected items.
+        var region = region_sel.value();
+        var year = year_sel.value();
+        var compare_region = compare_region_sel.value();
 
-        // Get the value of the company we're interested in from the
-        // select item. Temporarily hard-code an example for now.
-        region = region_sel.value();
-        year = year_sel.value();
+        // function call for toggle snapshot display
+        toggleSnapshotDisplay(region, year);
 
-        if(region == "Please select a region") {
-            
-        } else {
-            if(year == "Please select a year") {
+        // Only displaying header label when a sel value has been selected.
+        // this conditional rules out the default options as a selection
+        if(region != "Please select a region" && region != "---" && year != "Please select a year" && year != "---") {
 
+            // function call to display the graph legend
+            graphLegend(this.compare, region, compare_region);
+
+            // Get the rows of raw data for the selected region and compare region.
+            var rows = this.data.findRows(region, 'Name');
+            var compare = this.data.findRows(compare_region, 'Name');
+
+            // Filter rows and compare to retain only items that include the selected year.
+            rows = getSelectedYearData(rows, year);
+            compare = getSelectedYearData(compare, year);
+
+            // function call to sort the data
+            // sortRegionData returns an object with two properties
+            // therefore each property from the object must be reassigned variable names in order to use the values
+            var myRegionData = sortRegionData(rows);
+            var regionValue = myRegionData.regionValue;
+            var regionData = myRegionData.regionData;
+
+            // function calls for createTemporaryDataArray
+            // pass data tempDataCount, regionValue and tempData
+            createTemporaryDataArray(tempDataCount, regionValue, tempData);
+
+            // pass data compareTempDataCount, regionValue and compareTempData
+            createTemporaryDataArray(compareTempDataCount, regionValue, compareTempData);
+
+            // remap mouseX so it only returns integers
+            var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
+
+            // function call to draw the linegraph
+            // this conditional statement checks whether the user has selected the compare option
+            if(!this.compare) {
+                // if the user has not selected the compare option, only 4 arguments are passed
+                this.lineGraph.draw(myMouseX, tempData, regionData, regionValue);
             } else {
-                push();
-                textSize(32);
-                text(region + ' - ' + year, 10, 30);
-                pop();
+                // function call to sort the data
+                // sortRegionData returns an object with two properties
+                // therefore each property from the object must be reassigned variable names in order to use the values
+                var myCompareData = sortRegionData(compare);
+                var compareValue = myCompareData.regionValue;
+                var compareData = myCompareData.regionData;
 
-                button = createButton("Snapshot <i class='fa fa-camera'></i>");
-                button.position(400,180);
-                button.id('snapshot');
-                button.mousePressed(this.snapshot);
+                // if user has selected the compare option, 3 more arguments are passed - the data for the compare region
+                this.lineGraph.draw(myMouseX, tempData, regionData, regionValue, compareTempData, compareData, compareValue); 
             }
         }
-        
-
-        // Get the column of raw data for companyName.
-        rows = this.data.findRows(region, 'Name');
-        rows = rows.filter(function(item) {
-            return item.arr[0].includes(year);
-        });
-
-        // create array and push the value in 3rd column ie 2nd index of the array into regionData
-        var regionValue = [];
-        for(var i=0; i<rows.length; i++) {
-            var data = {
-                date: rows[i].arr[0],
-                region: rows[i].arr[1],
-                value: rows[i].arr[2],
-            }
-            regionValue.push(data.value);
-            regionData.push(data);
-        }
-        
-        var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
-
-        beginShape();
-        for(var i=0; i<regionData.length; i++) {
-            //fill(0);
-            noFill();
-            var x = map(i, 0, regionData.length, 0, canvas_width);
-            var max_h = -map(regionData[i].value, 0, max(regionValue),0, canvas_height);
-            
-            //rect(x, canvas_bottom_y, canvas_width/regionData.length, max_h);
-            //
-            push()
-            var month = regionData[i].date.split('-')[1]
-            if(month == '01') {
-                stroke(255,0,0, 120);
-                line(x, canvas_bottom_y-60, x, 0);
-            } else {
-                stroke(255,0,0, 50);
-                line(x, canvas_bottom_y - 70, x, 0);
-            }
-            pop();
-            vertex(x, canvas_bottom_y + max_h);
-
-        }
-        endShape();
-
-        // create function for drawing data labels
-        for(var i=0; i<regionData.length; i++) {
-            var x = map(i, 0, regionData.length, 0, canvas_width);
-            var max_h = -map(regionData[i].value, 0, max(regionValue),0, canvas_height);
-            if(myMouseX < Math.round(x) + 2 && myMouseX > Math.round(x) - 2) {
-                push();
-                strokeWeight(8);
-                fill(0);
-                point(x, canvas_bottom_y + max_h);
-                push();
-                strokeWeight(1);
-                fill(255,255,0,230);
-                if(mouseX + 170 >= width) {
-                    translate(mouseX-170, mouseY+10);
-                } else {
-                    translate(mouseX+10, mouseY+10);
-                }
-                rect(0,0, 190, 60);
-                fill(0);
-                text("Sales Volume: " + regionData[i].value, 20,20);
-                text("Date: " + regionData[i].date, 20,50);
-                pop();
-                pop();
-            }
-        }
-
-        line(mouseX, canvas_bottom_y, mouseX, 0);
-
-        for(var i=0; i<regionData.length; i+=12) {
-            var year = regionData[i].date.split('-')[0]
-            var x = map(i, 0, regionData.length, 0, canvas_width);
-            fill(0);
-            text(year, x, canvas_bottom_y - 50);
-        }
-
-        // Draw the pie chart!
-        /*
-        this.pie.draw(col, labels, colours, title);
-        for(var i=0; i<labels.length; i++) {
-            this.pie.makeLegendItem(labels, i);
-        }
-        */
     };
 
     this.snapshot = function(c) {
