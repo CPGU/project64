@@ -34,24 +34,12 @@ function AveragePriceByRegionByYear(c) {
           return;
         }
 
-        // Create a region select DOM element.
-        createRegionDropdownMenu();
 
         // create a variable and assign it the column with header 'name' from the this.data table
         var regions = this.data.getColumn('Name');
 
         // call function to remove duplicate region names.
         regions = removeRegionDuplicates(regions);
-
-        // Set default option
-        region_sel.option('Please select a region');
-        region_sel.option('---');
-
-        // fill the dropdown menu with region options
-        fillDropdownMenu(regions, region_sel);
-
-        // when region_sel is changed, call this.resetCount and then this.draw
-        region_sel.changed(this.draw);
 
         // Create a year select DOM element
         createYearDropdownMenu();
@@ -97,6 +85,7 @@ function AveragePriceByRegionByYear(c) {
         tempDataCount = 0;
         compareTempData = [];
         compareTempDataCount = 0;
+        
     };
 
     // when called, this method resets the value of tempData to an empty array and tempDataCount to 0
@@ -146,7 +135,7 @@ function AveragePriceByRegionByYear(c) {
         }
 
         // Get the value of the region and year we're interested in from the selected items.
-        var region = region_sel.value();
+        var region = decodeURI(getRequestURL(url));;
         var year = year_sel.value();
         var compare_region = compare_region_sel.value();
 

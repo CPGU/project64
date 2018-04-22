@@ -34,24 +34,11 @@ function SalesVolumesByRegion(c) {
           return;
         }
 
-        // Create a region select DOM element.
-        createRegionDropdownMenu();
-
         // create a variable and assign it the column with header 'name' from the this.data table
         var regions = this.data.getColumn('Name');
 
         // call function to remove duplicate region names.
         regions = removeRegionDuplicates(regions);
-
-        // Set default option
-        region_sel.option('Please select a region');
-        region_sel.option('---');
-
-        // fill the dropdown menu with region options
-        fillDropdownMenu(regions, region_sel);
-
-        // when region_sel is changed, call this.resetCount and then this.draw
-        region_sel.changed(this.resetCount, this.draw);
 
         //comparison
         // call functions to create a Compare check box and a dropdown menu.

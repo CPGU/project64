@@ -10,8 +10,7 @@ function setup() {
     var regions = data.getColumn('Name');
     
     regions = removeRegionDuplicates(regions);
-    region_sel.option('Please select a region');
-    region_sel.option('---');
+    region_sel.option('');
 
     // fill the dropdown menu with region options
     fillDropdownMenu(regions, region_sel);

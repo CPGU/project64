@@ -32,22 +32,7 @@ function OverallRegionData() {
             console.log("Data not yet loaded!");
             return;
         }
-
-        // Create a select DOM element.
-        createRegionDropdownMenu();
-
-        // Fill the options with all region names.
-        var regions = this.salesVolumeTable.getColumn('Name');
-        regions = removeRegionDuplicates(regions);
-
-        // Set default option
-        region_sel.option('Please select a region');
-        region_sel.option('---');
-
-        // fill the dropdown menu with options
-        fillDropdownMenu(regions, region_sel);
-
-        region_sel.changed(this.resetCounts, this.draw);
+        
 
         //add comparison
         whileCount = 0;
@@ -80,6 +65,7 @@ function OverallRegionData() {
         monthlySpendAmount = createElement("p");
         monthlySpendAmount.id("monthlySpendAmount");
         monthlySpendAmount.parent("overallInfo");
+
     };
 
     this.resetCounts = function() {

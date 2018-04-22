@@ -20,6 +20,14 @@ function createRegionCompareDropdownMenu() {
     compare_region_sel.hide();
 }
 
+function createNavbarRegionDropdownMenu() {
+    region_sel = createSelect();
+    region_sel.parent('regionSelector');
+    region_sel.id('navbarRegionSelection');
+    region_sel.option(decodeURI(getRequestURL(url)));
+    region_sel.option('---')
+}
+
 function createYearDropdownMenu() {
     year_sel = createSelect();
     year_sel.parent('year-select');
@@ -104,7 +112,7 @@ function drawLabel(object, i, data, compareData) {
     if(object.name.includes('Sales')) {
         var date = formatDate(data[i].date);
         var labelTitle = "Sales Volume for " + date;
-        var regionContext = region_sel.value() + ": " + formatNumber(data[i].value);
+        var regionContext = decodeURI(getRequestURL(url)) + ": " + formatNumber(data[i].value);
         var compareContext = getCompareContext(object, compareData, i);
         var maxLabelWidth = getMaxLabelWidth(object, labelTitle, regionContext, compareContext);
         var offset = maxLabelWidth/8; 
@@ -117,7 +125,7 @@ function drawLabel(object, i, data, compareData) {
     } else if(object.name.includes('Average')) {
         var date = formatDate(data[i].date);
         var labelTitle = "Average Price for " + date;
-        var regionContext = region_sel.value() + ": £" + formatNumber(Math.round(data[i].value * 100)/100);
+        var regionContext = decodeURI(getRequestURL(url)) + ": £" + formatNumber(Math.round(data[i].value * 100)/100);
         var compareContext = getCompareContext(object, compareData, i);
         var maxLabelWidth = getMaxLabelWidth(object, labelTitle, regionContext, compareContext);
         var offset = maxLabelWidth/8; 

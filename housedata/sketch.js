@@ -3,6 +3,10 @@
 var gallery;
 var url;
 
+function preload() {
+    data = loadTable('data/Average-Prices-SA-SM.csv', 'csv', 'header');
+}
+
 function setup() {
     // Create a canvas to fill the div with id app from data_by_region.html.
     // grab width and height of the DOM element with id app using jQuery.
@@ -25,6 +29,8 @@ function setup() {
     gallery.addFigure(new AveragePriceByRegionByYear(c));
 
     getRequestURL(url);
+
+   
 }
 
 function draw() {
@@ -35,6 +41,10 @@ function draw() {
     if (gallery.selectedFigure != null) {
         gallery.selectedFigure.draw();
     }
+}
+
+function changeRegion() {
+    window.location.href = 'data.html?region=' + region_sel.value();
 }
 
 

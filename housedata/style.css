@@ -23,13 +23,19 @@
 
 #graph {
     width: 65vw;
-    height: 80vh;
+    height: 90vh;
     margin-top: 0vh;
-    padding-left: 34vw;
+    padding-left: 22vw;
 }
 
 #figure-menu {
     position: absolute; left: 0px; top: 68px;
+}
+
+#yearSelection {
+    position: absolute;
+    margin-top: 30px;
+    left: 650px;
 }
 
 /* change the values here -- just for testing -- */
@@ -94,20 +100,9 @@ header span {
     font-weight: 500;
 }
 
-header button {
-    padding: 24px 26px;
-    width: 40%;
-    border-radius: 30px;
-    border: none;
-    background-color: #ecf0f1;
-    border-bottom: 3px solid #bdc3c7;
-    transition-duration: 0.4s;
-    outline: none;
-}
-
-header button:hover {
-    transform: scale(1.1,1.1);
-    border-bottom: 1px solid #bdc3c7;
+header p {
+    color: #FFF;
+    
 }
 
 select#regionSelection {
@@ -135,10 +130,18 @@ button#snapshot {
     background-color: #f1f2f6;
 }
 
-#graph {
-    margin-left: -230px;
+p#overallSpendAmount,
+p#yearlySpendAmount,
+p#monthlySpendAmount {
+    font-size: 3em;
+    font-weight: 700;
+    color: #92FE9D;
+    text-align: center
 }
 
-#compare-box {
-    
+p#overallInfo {
+    font-size: 4em;
+    font-weight: 400;
+     color: #92FE9D;
+    text-align: center
 }

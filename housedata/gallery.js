@@ -3,6 +3,7 @@ function Gallery() {
   this.figures = [];
   this.selectedFigure = null;
 
+
   // Add a new figure to the navigation bar.
   this.addFigure = function(fig) {
 
@@ -35,7 +36,7 @@ function Gallery() {
   };
 
   this.selectFigure = function(figId){
-    console.log('selectFigure:', figId);
+    //console.log('selectFigure:', figId);
 
     // Search through the figures looking for one with the id
     // matching figId.
