@@ -91,7 +91,8 @@ function SalesVolumesByRegionByYear(c) {
         createSnapshotButton(this);
 
         // global variables to be used in draw
-        // tempData and compareTempData is used as a incrementor for the graph animation.
+        // tempDataCount and compareTempDataCount are used as a incrementor for the graph animation.
+        // tempData and compareTempData are used to fill with multiple objects initalised with one property of value 0
         tempData = [];
         tempDataCount = 0;
         compareTempData = [];
@@ -175,33 +176,12 @@ function SalesVolumesByRegionByYear(c) {
             var regionValue = myRegionData.regionValue;
             var regionData = myRegionData.regionData;
 
-            // while loop that checks if tempDataCount is less than the number of elements in the regionValue
-            while(tempDataCount < regionValue.length) {
-                // for each iteration, push an object into the tempData array with one key/value of value:0.
-                // the tempData will eventually contain the same number of elements as regionValue
-                // with all values set to 0
-                var data = {
-                    value: 0,
-                };
-                tempData.push(data);
+            // function calls for createTemporaryDataArray
+            // pass data tempDataCount, regionValue and tempData
+            createTemporaryDataArray(tempDataCount, regionValue, tempData);
 
-                // increment tempDatacount
-                tempDataCount += 1;
-            }
-
-            // while loop that checks if compareTempDataCount is less than the number of elements in the regionValue
-            while(compareTempDataCount < regionValue.length) {
-                // for each iteration, push an object into the compareTempData array with one key/value of value:0.
-                // the compareTempData will eventually contain the same number of elements as regionValue
-                // with all values set to 0
-                var data = {
-                    value: 0,
-                };
-                compareTempData.push(data);
-
-                // increment compareTempDatacount
-                compareTempDataCount += 1;
-            }
+            // pass data compareTempDataCount, regionValue and compareTempData
+            createTemporaryDataArray(compareTempDataCount, regionValue, compareTempData);
 
             // remap mouseX so it only returns integers
             var myMouseX = Math.round(map(mouseX, 0, width, 0, width));

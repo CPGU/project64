@@ -263,3 +263,18 @@ function getSelectedYearData(rows, year) {
         return item.arr[0].includes(year);
     });
 }
+
+function createTemporaryDataArray(count, array, tempArray) {
+    // while loop that checks if count is less than the number of elements in the array 
+    while(count < array.length) {
+        // for each iteration, push an object with one key/value of value:0 into the tempArray.
+        // the tempArray will eventually contain the same number of elements as array with all values set to 0
+        var data = {
+            value: 0,
+        };
+        tempArray.push(data);
+
+        // increment count 
+        count += 1;
+    }
+}
