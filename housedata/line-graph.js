@@ -46,6 +46,7 @@ function LineGraph(object) {
 
         for(var i=0; i<dataList.length; i+=12) {
             var year = dataList[i].date.split('-')[0]
+            year = "'" + year.slice(2);
             var x = map(i, 0, dataList.length, 0, canvas_width);
             fill(0);
             text(year, x, graph_bottom);
