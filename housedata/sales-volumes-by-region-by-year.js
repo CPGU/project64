@@ -165,13 +165,8 @@ function SalesVolumesByRegionByYear(c) {
             var compare = this.data.findRows(compare_region, 'Name');
 
             // Filter rows and compare to retain only items that include the selected year.
-            rows = rows.filter(function(item) {
-                return item.arr[0].includes(year);
-            });
-
-            compare = compare.filter(function(item) {
-                return item.arr[0].includes(year);
-            });
+            rows = getSelectedYearData(rows, year);
+            compare = getSelectedYearData(compare, year);
 
             // function call to sort the data
             // sortRegionData returns an object with two properties

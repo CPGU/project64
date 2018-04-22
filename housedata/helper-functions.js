@@ -257,3 +257,9 @@ function graphLegend(compare, region, compareRegion) {
         }
     }
 }
+
+function getSelectedYearData(rows, year) {
+    return rows.filter(function(item) {
+        return item.arr[0].includes(year);
+    });
+}
