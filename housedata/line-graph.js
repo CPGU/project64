@@ -1,14 +1,14 @@
 function LineGraph(object) {
     this.object = object;
 
-    this.draw = function(mouseXPos, tempData, dataList, valueList, compareDataList, compareValueList) {
+    this.draw = function(mouseXPos, tempData, dataList, valueList, compareTempData, compareDataList, compareValueList) {
 
         // draw compare graph. 2nd graph
         // if compare mode is on ie the object's compare property is is true
         //if(compareDataList !== undefined && compareValueList !== undefined) {
         if(this.object.compare) {
             valueRange = valueList.concat(compareValueList);
-            drawLineGraph(tempData, compareDataList, compareValueList, valueRange, 0, 255, 100);
+            drawLineGraph(compareTempData, compareDataList, compareValueList, valueRange, 0, 255, 100);
         } else {
             valueRange = valueList;
         }

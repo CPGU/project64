@@ -33,11 +33,11 @@ function SalesVolumesByRegion(c) {
         }
 
         // Create a select DOM element.
-
         createRegionDropdownMenu();
 
-        // remove duplicate region names.
         var regions = this.data.getColumn('Name');
+
+        // remove duplicate region names.
         regions = removeRegionDuplicates(regions);
 
         // Set default option
@@ -54,6 +54,7 @@ function SalesVolumesByRegion(c) {
         createRegionCompareDropdownMenu();
         compare_region_sel.option('Please select a region to compare');
         compare_region_sel.option('---');
+        compare_region_sel.changed(this.compareResetCount, this.draw);
         
         fillDropdownMenu(regions, compare_region_sel);
 
@@ -61,12 +62,20 @@ function SalesVolumesByRegion(c) {
 
         tempData = [];
         tempDataCount = 0;
+
+        compareTempData = [];
+        compareTempDataCount = 0;
     };
 
     this.resetCount = function() {
         tempData = [];
         tempDataCount = 0;
-    }
+    };
+
+    this.compareResetCount = function() {
+        compareTempData = [];
+        compareTempDataCount = 0;
+    };
 
     this.destroy = function() {
         removeElements();
@@ -106,43 +115,47 @@ function SalesVolumesByRegion(c) {
             textSize(32);
             text(region, 10, 30);
             pop();
-        }
 
-        // Get the rows of raw data for the selected region and compare region.
-        var rows = this.data.findRows(region, 'Name');
-        var compare = this.data.findRows(compare_region, 'Name');
+            // Get the rows of raw data for the selected region and compare region.
+            var rows = this.data.findRows(region, 'Name');
+            var compare = this.data.findRows(compare_region, 'Name');
 
-        // create array and push the value in 3rd column ie 2nd index of the array into regionData
-        var myRegionData = sortRegionData(rows);
-        var regionValue = myRegionData.regionValue;
-        var regionData = myRegionData.regionData;
+            // create array and push the value in 3rd column ie 2nd index of the array into regionData
+            var myRegionData = sortRegionData(rows);
+            var regionValue = myRegionData.regionValue;
+            var regionData = myRegionData.regionData;
 
-        while(tempDataCount < regionValue.length) {
-            var data = {
-                value: 0,
-            };
-            tempData.push(data);
-            tempDataCount += 1;
-        }
-        
-        var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
+            while(tempDataCount < regionValue.length) {
+                var data = {
+                    value: 0,
+                };
+                tempData.push(data);
+                tempDataCount += 1;
+            }
 
-        // draw the linegraph
-        //this.lineGraph.draw(myMouseX, regionData, regionValue, compareData, compareValue); 
+            while(compareTempDataCount < regionValue.length) {
+                var data = {
+                    value: 0,
+                };
+                compareTempData.push(data);
+                compareTempDataCount += 1;
+            }
 
-        if(!this.compare) {
-            this.lineGraph.draw(myMouseX, tempData, regionData, regionValue); 
-        } else {
-            var myCompareData = sortRegionData(compare);
-            var compareValue = myCompareData.regionValue;
-            var compareData = myCompareData.regionData;
-            this.lineGraph.draw(myMouseX, tempData, regionData, regionValue, compareData, compareValue); 
+            var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
+
+            // draw the linegraph
+            if(!this.compare) {
+                this.lineGraph.draw(myMouseX, tempData, regionData, regionValue); 
+            } else {
+                var myCompareData = sortRegionData(compare);
+                var compareValue = myCompareData.regionValue;
+                var compareData = myCompareData.regionData;
+                this.lineGraph.draw(myMouseX, tempData, regionData, regionValue, compareTempData, compareData, compareValue); 
+            }
         }
     };
 
     this.snapshot = function(c) {
         saveCanvas(this.c, 'Test', 'png');
     }
-
-   
 }

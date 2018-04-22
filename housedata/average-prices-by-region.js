@@ -10,6 +10,7 @@ function AveragePriceByRegion(c) {
     // Property to represent whether data has been loaded.
     this.loaded = false;
 
+    // Property to represent whether the user has selected a comparison value.
     this.compare = false;
 
     // Preload the data. This function is called automatically by the
@@ -34,28 +35,48 @@ function AveragePriceByRegion(c) {
         // Create a select DOM element.
         createRegionDropdownMenu();
 
-        // Fill the options with all region names.
         var regions = this.data.getColumn('Name');
+
+        // remove duplicate region names.
         regions = removeRegionDuplicates(regions);
 
         // Set default option
         region_sel.option('Please select a region');
         region_sel.option('---');
 
-        // fill the dropdown menu with options
+        // fill the dropdown menu with region options
         fillDropdownMenu(regions, region_sel);
 
-        region_sel.changed(this.draw);
+        region_sel.changed(this.resetCount, this.draw);
 
         //comparison
         createCompareCheckbox();
         createRegionCompareDropdownMenu();
         compare_region_sel.option('Please select a region to compare');
         compare_region_sel.option('---');
+        compare_region_sel.changed(this.compareResetCount, this.draw);
         
         fillDropdownMenu(regions, compare_region_sel);
 
         createSnapshotButton(this);
+
+        tempData = [];
+        tempDataCount = 0;
+
+        compareTempData = [];
+        compareTempDataCount = 0;
+    };
+
+    this.regionData;
+
+    this.resetCount = function() {
+        tempData = [];
+        tempDataCount = 0;
+    };
+
+    this.compareResetCount = function() {
+        compareTempData = [];
+        compareTempDataCount = 0;
     };
 
     this.destroy = function() {
@@ -95,29 +116,45 @@ function AveragePriceByRegion(c) {
             textSize(32);
             text(region, 10, 30);
             pop();
+
+            // Get the rows of raw data for the selected region and compare region.
+            var rows = this.data.findRows(region, 'Name');
+            var compare = this.data.findRows(compare_region, 'Name');
+
+            // create array and push the value in 3rd column ie 2nd index of the array into regionData
+            var myRegionData = sortRegionData(rows);
+            var regionValue = myRegionData.regionValue;
+            var regionData = myRegionData.regionData;
+            this.regionData = regionData;
+
+            while(tempDataCount < regionValue.length) {
+                var data = {
+                    value: 0,
+                };
+                tempData.push(data);
+                tempDataCount += 1;
+            }
+
+            while(compareTempDataCount < regionValue.length) {
+                var data = {
+                    value: 0,
+                };
+                compareTempData.push(data);
+                compareTempDataCount += 1;
+            }
+
+            var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
+
+            // draw the linegraph
+            if(!this.compare) {
+                this.lineGraph.draw(myMouseX, tempData, regionData, regionValue);
+            } else {
+                var myCompareData = sortRegionData(compare);
+                var compareValue = myCompareData.regionValue;
+                var compareData = myCompareData.regionData;
+                this.lineGraph.draw(myMouseX, tempData, regionData, regionValue, compareTempData, compareData, compareValue); 
+            }
         }
-
-        // Get the rows of raw data for the selected region and compare region.
-        var rows = this.data.findRows(region, 'Name');
-        var compare = this.data.findRows(compare_region, 'Name');
-
-        // create array and push the value in 3rd column ie 2nd index of the array into regionData
-        var myRegionData = sortRegionData(rows);
-        var regionValue = myRegionData.regionValue;
-        var regionData = myRegionData.regionData;
-
-        var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
-
-        // draw the lingraph
-        if(!this.compare) {
-            this.lineGraph.draw(myMouseX, regionData, regionValue);
-        } else {
-            var myCompareData = sortRegionData(compare);
-            var compareValue = myCompareData.regionValue;
-            var compareData = myCompareData.regionData;
-            this.lineGraph.draw(myMouseX, regionData, regionValue, compareData, compareValue); 
-        }
-        //this.barGraph.draw(regionData, regionValue);
     };
 
     this.snapshot = function(c) {

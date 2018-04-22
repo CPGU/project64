@@ -63,7 +63,7 @@ function SalesVolumesByRegionByYear(c) {
 
         // fill the dropdown menu with all years.
         fillDropdownMenu(yearList, year_sel);
-        year_sel.changed(this.draw);
+        year_sel.changed(this.resetCount, this.draw);
 
         //comparison
         createCompareCheckbox();
@@ -71,11 +71,29 @@ function SalesVolumesByRegionByYear(c) {
         createRegionCompareDropdownMenu();
         compare_region_sel.option('Please select a region to compare');
         compare_region_sel.option('---');
+        compare_region_sel.changed(this.compareResetCount, this.draw);
 
         fillDropdownMenu(regions, compare_region_sel);
 
         createSnapshotButton(this);
+
+        tempData = [];
+        tempDataCount = 0;
+
+        compareTempData = [];
+        compareTempDataCount = 0;
     };
+
+    this.resetCount = function() {
+        tempData = [];
+        tempDataCount = 0;
+    };
+
+    this.compareResetCount = function() {
+        compareTempData = [];
+        compareTempDataCount = 0;
+    };
+
 
     this.destroy = function() {
         removeElements();
@@ -116,35 +134,51 @@ function SalesVolumesByRegionByYear(c) {
             textSize(32);
             text(region, 10, 30);
             pop();
-        }
 
-        // Get the rows of raw data for the selected region.
-        var rows = this.data.findRows(region, 'Name');
-        var compare = this.data.findRows(compare_region, 'Name');
+            // Get the rows of raw data for the selected region.
+            var rows = this.data.findRows(region, 'Name');
+            var compare = this.data.findRows(compare_region, 'Name');
 
-        // Filter rows to retain only items that include the selected year.
-        rows = rows.filter(function(item) {
-            return item.arr[0].includes(year);
-        });
+            // Filter rows to retain only items that include the selected year.
+            rows = rows.filter(function(item) {
+                return item.arr[0].includes(year);
+            });
 
-        compare = compare.filter(function(item) {
-            return item.arr[0].includes(year);
-        });
+            compare = compare.filter(function(item) {
+                return item.arr[0].includes(year);
+            });
 
-        // create array and push the value in 3rd column ie 2nd index of the array into regionData
-        var myRegionData = sortRegionData(rows);
-        var regionValue = myRegionData.regionValue;
-        var regionData = myRegionData.regionData;
+            // create array and push the value in 3rd column ie 2nd index of the array into regionData
+            var myRegionData = sortRegionData(rows);
+            var regionValue = myRegionData.regionValue;
+            var regionData = myRegionData.regionData;
 
-        var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
+            while(tempDataCount < regionValue.length) {
+                var data = {
+                    value: 0,
+                };
+                tempData.push(data);
+                tempDataCount += 1;
+            }
 
-        if(!this.compare) {
-            this.lineGraph.draw(myMouseX, regionData, regionValue);
-        } else {
-            var myCompareData = sortRegionData(compare);
-            var compareValue = myCompareData.regionValue;
-            var compareData = myCompareData.regionData;
-            this.lineGraph.draw(myMouseX, regionData, regionValue, compareData, compareValue); 
+            while(compareTempDataCount < regionValue.length) {
+                var data = {
+                    value: 0,
+                };
+                compareTempData.push(data);
+                compareTempDataCount += 1;
+            }
+
+            var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
+
+            if(!this.compare) {
+                this.lineGraph.draw(myMouseX, tempData, regionData, regionValue);
+            } else {
+                var myCompareData = sortRegionData(compare);
+                var compareValue = myCompareData.regionValue;
+                var compareData = myCompareData.regionData;
+                this.lineGraph.draw(myMouseX, tempData, regionData, regionValue, compareTempData, compareData, compareValue); 
+            }
         }
     };
 

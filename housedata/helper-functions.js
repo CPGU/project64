@@ -72,7 +72,8 @@ function drawLineGraph(tempData, data, value, range, r, g, b) {
     for(var i=0; i<data.length; i++) {
         if(tempData[i].value + data[i].value/60 < data[i].value) {
             var max_h = -map(tempData[i].value, 0, max(range),height/20, canvas_height-height/20);
-            tempData[i].value += data[i].value/(Math.floor(Math.random()*120)+1);
+            var myRandom = Math.floor(Math.random()*30)+1;
+            tempData[i].value += data[i].value/myRandom;
         } else {
             var max_h = -map(data[i].value, 0, max(range),height/20, canvas_height-height/20);
         }
