@@ -126,7 +126,7 @@ function AveragePriceByRegion(c) {
         }
 
         // Get the value of the region we're interested in from the selected items.
-        var region = region_sel.value();
+        var region = decodeURI(getRequestURL(url));
         var compare_region = compare_region_sel.value();
 
         // function call for toggle snapshot display

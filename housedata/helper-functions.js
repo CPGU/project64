@@ -278,3 +278,10 @@ function createTemporaryDataArray(count, array, tempArray) {
         count += 1;
     }
 }
+
+function getRequestURL(url) {
+    url = getURL();
+    newURL = split(url, 'region=');
+    return newURL[1];
+
+}

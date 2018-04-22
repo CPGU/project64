@@ -12,6 +12,7 @@ function Gallery() {
       alert('Make sure your figure has an id and name!');
     }
 
+
     this.figures.push(fig);
 
     var menuItem = document.createElement('li');
@@ -34,7 +35,7 @@ function Gallery() {
   };
 
   this.selectFigure = function(figId){
-    // console.log('selectFigure:', figId);
+    console.log('selectFigure:', figId);
 
     // Search through the figures looking for one with the id
     // matching figId.

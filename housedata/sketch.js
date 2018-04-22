@@ -1,6 +1,7 @@
 // Global variable to store the gallery object. The gallery object is
 // a container for all the data visualisations.
 var gallery;
+var url;
 
 function setup() {
     // Create a canvas to fill the div with id app from data_by_region.html.
@@ -22,6 +23,8 @@ function setup() {
     gallery.addFigure(new AveragePriceByRegion(c));
     gallery.addFigure(new SalesVolumesByRegionByYear(c));
     gallery.addFigure(new AveragePriceByRegionByYear(c));
+
+    getRequestURL(url);
 }
 
 function draw() {
@@ -30,6 +33,8 @@ function draw() {
 
     // call the draw method of the selectedFigure object from gallery.
     if (gallery.selectedFigure != null) {
-    gallery.selectedFigure.draw();
+        gallery.selectedFigure.draw();
     }
 }
+
+

@@ -9,19 +9,26 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+     <!-- Libraries -->
+     <script src="lib/p5.min.js"></script>
+     <script src="lib/p5.dom.min.js"></script>
+    <script src="index.js"></script>
+    
+    <!-- Add extra scripts below -->
+    <script src="helper-functions.js"></script>
 
   </head>
   <body>
     <!-- Navigation -->
-    <div id="navbar">
+    <!-- <div id="navbar">
       <ul>
         <li class="title"><a href="index.html">Project<b>64</b></a></li>
         <li><a href="data_by_year.html">By Year <i class="fa fa-calendar"></i></a></li>
         <li><a href="data_by_region.html">By Region <i class="fa fa-paper-plane"></i></a></li>
       </ul>
-    </div>
+    </div> -->
     <!-- Header -->
-    <header>
+    <!-- <header>
       <h1>Project64</h1>
       <center>
           <div class="col-6">
@@ -31,6 +38,14 @@
               <a href="data_by_year.html"><button>By Year <i class="fa fa-paper-plane"></i></button></a>
           </div>
       </center>
+    </header> -->
+    <header>
+        <h1>Project<span>64</span></h1>
+        <center>
+          <p>Please select a region</p>
+          <div id="dropdown_region">
+          </div>
+        </center>
     </header>
   </body>
 </html>

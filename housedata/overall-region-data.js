@@ -99,7 +99,7 @@ function OverallRegionData() {
     this.lineGraph = new LineGraph(this);
 
     this.totalSpend = function() {
-        var region = region_sel.value();
+        var region = decodeURI(getRequestURL(url));
         var salesVolume = this.salesVolumeTable.findRows(region, 'Name');
         var averagePrice = this.averagePriceTable.findRows(region, 'Name');
         if(salesVolume.length > 0) {
@@ -119,7 +119,7 @@ function OverallRegionData() {
 
         this.totalSpend();
 
-        var region = region_sel.value();
+        var region = decodeURI(getRequestURL(url));
         if(region == "Please select a region" || region == "---") {
         } else {
             if(currentOverallAmount + Math.round(totalSpend/120*100)/100 < totalSpend) {

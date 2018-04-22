@@ -147,7 +147,7 @@ function SalesVolumesByRegionByYear(c) {
         }
 
         // Get the value of the region and year we're interested in from the selected items.
-        var region = region_sel.value();
+        var region = decodeURI(getRequestURL(url));
         var year = year_sel.value();
         var compare_region = compare_region_sel.value();
 
