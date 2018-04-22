@@ -59,21 +59,25 @@ function sortRegionData(items) {
         regionValue.push(data.value);
         regionData.push(data);
     }
-    var data = new Object();
-    data.regionValue = regionValue;
-    data.regionData = regionData;
-    return data;
+    var dataObject = new Object();
+    dataObject.regionValue = regionValue;
+    dataObject.regionData = regionData;
+    return dataObject;
 }
 
-function drawLineGraph(data, value, range, r, g, b) {
+function drawLineGraph(tempData, data, value, range, r, g, b) {
     push();
     stroke(r, g, b);
     beginShape();
     for(var i=0; i<data.length; i++) {
-        //fill(0);
+        if(tempData[i].value + data[i].value/60 < data[i].value) {
+            var max_h = -map(tempData[i].value, 0, max(range),height/20, canvas_height-height/20);
+            tempData[i].value += data[i].value/(Math.floor(Math.random()*120)+1);
+        } else {
+            var max_h = -map(data[i].value, 0, max(range),height/20, canvas_height-height/20);
+        }
         noFill();
         var x = map(i, 0, data.length, 0, canvas_width);
-        var max_h = -map(data[i].value, 0, max(range),height/20, canvas_height-height/20);
         vertex(x, canvas_bottom_y + max_h);
     }
     endShape();

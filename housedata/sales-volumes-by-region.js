@@ -47,7 +47,7 @@ function SalesVolumesByRegion(c) {
         // fill the dropdown menu with region options
         fillDropdownMenu(regions, region_sel);
 
-        region_sel.changed(this.draw);
+        region_sel.changed(this.resetCount, this.draw);
 
         //comparison
         createCompareCheckbox();
@@ -58,7 +58,15 @@ function SalesVolumesByRegion(c) {
         fillDropdownMenu(regions, compare_region_sel);
 
         createSnapshotButton(this);
+
+        tempData = [];
+        tempDataCount = 0;
     };
+
+    this.resetCount = function() {
+        tempData = [];
+        tempDataCount = 0;
+    }
 
     this.destroy = function() {
         removeElements();
@@ -108,7 +116,14 @@ function SalesVolumesByRegion(c) {
         var myRegionData = sortRegionData(rows);
         var regionValue = myRegionData.regionValue;
         var regionData = myRegionData.regionData;
-        
+
+        while(tempDataCount < regionValue.length) {
+            var data = {
+                value: 0,
+            };
+            tempData.push(data);
+            tempDataCount += 1;
+        }
         
         var myMouseX = Math.round(map(mouseX, 0, width, 0, width));
 
@@ -116,12 +131,12 @@ function SalesVolumesByRegion(c) {
         //this.lineGraph.draw(myMouseX, regionData, regionValue, compareData, compareValue); 
 
         if(!this.compare) {
-            this.lineGraph.draw(myMouseX, regionData, regionValue); 
+            this.lineGraph.draw(myMouseX, tempData, regionData, regionValue); 
         } else {
             var myCompareData = sortRegionData(compare);
             var compareValue = myCompareData.regionValue;
             var compareData = myCompareData.regionData;
-            this.lineGraph.draw(myMouseX, regionData, regionValue, compareData, compareValue); 
+            this.lineGraph.draw(myMouseX, tempData, regionData, regionValue, compareData, compareValue); 
         }
     };
 

@@ -1,21 +1,21 @@
 function LineGraph(object) {
     this.object = object;
 
-    this.draw = function(mouseXPos, dataList, valueList, compareDataList, compareValueList) {
+    this.draw = function(mouseXPos, tempData, dataList, valueList, compareDataList, compareValueList) {
 
         // draw compare graph. 2nd graph
         // if compare mode is on ie the object's compare property is is true
         //if(compareDataList !== undefined && compareValueList !== undefined) {
         if(this.object.compare) {
             valueRange = valueList.concat(compareValueList);
-            drawLineGraph(compareDataList, compareValueList, valueRange, 0, 255, 100);
+            drawLineGraph(tempData, compareDataList, compareValueList, valueRange, 0, 255, 100);
         } else {
             valueRange = valueList;
         }
 
         // draw original graph
         // first graph
-        drawLineGraph(dataList, valueList, valueRange, 0, 0, 0);
+        drawLineGraph(tempData, dataList, valueList, valueRange, 0, 0, 0);
 
         // create function for drawing data labels
         for(var i=0; i<dataList.length; i++) {
