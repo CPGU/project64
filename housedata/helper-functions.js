@@ -110,7 +110,7 @@ function drawLabel(object, i, data, compareData) {
         var offset = maxLabelWidth/8; 
         var rectWidth = maxLabelWidth+(offset*2);
         // add elseif to translate label box if y is greater than canvas bottom y
-        checkLabelBoundaries(rectWidth);
+        checkLabelBoundaries(object, rectWidth);
         fill(255,255,0,230);
         setLabelBoxHeight(object, compareData, rectWidth);
         renderLabelContext(object, compareData, labelTitle, regionContext, compareContext, offset);
@@ -123,7 +123,7 @@ function drawLabel(object, i, data, compareData) {
         var offset = maxLabelWidth/8; 
         var rectWidth = maxLabelWidth+(offset*2);
         // add elseif to translate label box if y is greater than canvas bottom y
-        checkLabelBoundaries(rectWidth);
+        checkLabelBoundaries(object, rectWidth);
         fill(255,255,0,230);
         setLabelBoxHeight(object, compareData, rectWidth);
         renderLabelContext(object, compareData, labelTitle, regionContext, compareContext, offset);
@@ -154,11 +154,21 @@ function getMaxLabelWidth(object, title, region, compare) {
     return maxLabelWidth;
 }
 
-function checkLabelBoundaries(rectWidth) {
+function checkLabelBoundaries(object, rectWidth) {
     if(mouseX + 10 + rectWidth >= width) {
-        translate(mouseX - 10 - rectWidth, mouseY+10);
+         translate(mouseX - 10 - rectWidth, mouseY+10);
     } else {
         translate(mouseX+10, mouseY+10);
+    }
+
+    if(!object.compare) {
+        var offset = height/15+textAscent();
+    } else {
+        var offset = height/15+textAscent()*3;
+    }
+
+    if(mouseY + 10 + offset >= height) {
+        translate(0, -10 - offset);
     }
 }
 
