@@ -174,20 +174,20 @@ function checkLabelBoundaries(object, rectWidth) {
 
 function setLabelBoxHeight(object, compareData, rectWidth) {
     if(object.compare && compareData.length > 0) {
-        rect(0,0, rectWidth, height/15+textAscent()*3);
-    } else {
         rect(0,0, rectWidth, height/15+textAscent());
+    } else {
+        rect(0,0, rectWidth, height/15);
     }
 }
 
 function renderLabelContext(object, compareData, title, region, compare, offset) {
     fill(0);
     textStyle(BOLD);
-    text(title, offset, 20);
+    text(title, offset, height/30);
     textStyle(NORMAL);
-    text(region, offset, height/30+textAscent()*2);
+    text(region, offset, height/30+textAscent());
     if(object.compare && compareData.length > 0) {
-        text(compare, offset, height/30+textAscent()*4);
+        text(compare, offset, height/30+textAscent()*2);
     }
 }
 
