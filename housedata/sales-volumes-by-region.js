@@ -111,10 +111,7 @@ function SalesVolumesByRegion(c) {
 
         // Only displaying header label when a sel value has been selected.
         if(region != "Please select a region" && region != "---") {
-            push();
-            textSize(32);
-            text(region, 10, 30);
-            pop();
+            graphLegend(this.compare, region, compare_region);
 
             // Get the rows of raw data for the selected region and compare region.
             var rows = this.data.findRows(region, 'Name');

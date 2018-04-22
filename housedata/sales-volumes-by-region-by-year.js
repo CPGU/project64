@@ -130,10 +130,7 @@ function SalesVolumesByRegionByYear(c) {
         toggleSnapshotDisplay(region, year);
 
         if(region != "Please select a region" && region != "---" && year != "Please select a year" && year != "---") {
-            push();
-            textSize(32);
-            text(region, 10, 30);
-            pop();
+            graphLegend(this.compare, region, compare_region);
 
             // Get the rows of raw data for the selected region.
             var rows = this.data.findRows(region, 'Name');

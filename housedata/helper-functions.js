@@ -71,11 +71,11 @@ function drawLineGraph(tempData, data, value, range, r, g, b) {
     beginShape();
     for(var i=0; i<data.length; i++) {
         if(tempData[i].value + data[i].value/60 < data[i].value) {
-            var max_h = -map(tempData[i].value, 0, max(range),height/20, canvas_height-height/20);
+            var max_h = -map(tempData[i].value, 0, max(range),height/20, canvas_height-height/10);
             var myRandom = Math.floor(Math.random()*30)+1;
             tempData[i].value += data[i].value/myRandom;
         } else {
-            var max_h = -map(data[i].value, 0, max(range),height/20, canvas_height-height/20);
+            var max_h = -map(data[i].value, 0, max(range),height/20, canvas_height-height/10);
         }
         noFill();
         var x = map(i, 0, data.length, 0, canvas_width);
@@ -89,9 +89,9 @@ function graphLines(data, x, i) {
     push()
     var month = data[i].date.split('-')[1]
     if(month == '01') {
-        stroke(255,0,0, 120);
+        stroke(200,200,200, 120);
     } else {
-        stroke(255,0,0, 50);
+        stroke(200,200,200, 50);
     }
     line(x, canvas_bottom_y, x, 0);
     pop();
@@ -232,6 +232,28 @@ function toggleSnapshotDisplay(region, year) {
             $('#snapshot-button').show();
         } else {
             $('#snapshot-button').hide();
+        }
+    }
+}
+
+function graphLegend(compare, region, compareRegion) {
+    // do not use absolute values
+    push();
+    textSize(14);
+    fill(0,204,102);
+    rect(width/40,height/20, width/80, -width/80);
+    fill(0);
+    text(region, width/20, height/20);
+    pop();
+    if(compare) {
+        if(compare_region_sel.value() != "Please select a region to compare") {
+            push();
+            textSize(14);
+            fill(255, 102, 102);
+            rect(width/40, height/20+textAscent()*1.5, width/80, -width/80);
+            fill(0);
+            text(compareRegion, width/20, height/20+textAscent()*1.5);
+            pop();
         }
     }
 }

@@ -8,22 +8,22 @@ function LineGraph(object) {
         //if(compareDataList !== undefined && compareValueList !== undefined) {
         if(this.object.compare) {
             valueRange = valueList.concat(compareValueList);
-            drawLineGraph(compareTempData, compareDataList, compareValueList, valueRange, 0, 255, 100);
+            drawLineGraph(compareTempData, compareDataList, compareValueList, valueRange, 255, 102, 102);
         } else {
             valueRange = valueList;
         }
 
         // draw original graph
         // first graph
-        drawLineGraph(tempData, dataList, valueList, valueRange, 0, 0, 0);
+        drawLineGraph(tempData, dataList, valueList, valueRange, 0, 204, 102);
 
         // create function for drawing data labels
         for(var i=0; i<dataList.length; i++) {
             var x = map(i, 0, dataList.length, 0, canvas_width);
-            var max_h = -map(dataList[i].value, 0, max(valueRange),height/20, canvas_height-height/20);
+            var max_h = -map(dataList[i].value, 0, max(valueRange),height/20, canvas_height-height/10);
             if(this.object.compare) {
                 if(compareDataList.length > 0) {
-                    var compare_max_h = -map(compareDataList[i].value, 0, max(valueRange),height/20, canvas_height-height/20);
+                    var compare_max_h = -map(compareDataList[i].value, 0, max(valueRange),height/20, canvas_height-height/10);
                 }
             }
 
