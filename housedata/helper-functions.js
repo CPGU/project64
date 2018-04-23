@@ -105,16 +105,16 @@ function drawLineGraph(tempData, data, value, range, r, g, b) {
 
     // loop through the length of data
     for(var i=0; i<data.length; i++) {
-        // generate a random number
-        var myRandom = Math.floor(Math.random()*30)+1;
-
         // tempData[i].value has already been set to 0 and is used to compare values against data[i].value.
-        if(tempData[i].value + data[i].value/myRandom < data[i].value) {
+        if(tempData[i].value + data[i].value/60 < data[i].value) {
 
             // pass tempData[i].value as the value to be mapped if its value is less than data[i].value.
             // range is the regionValue array generated in sortRegionData();
             // mapping the maximum height value from between 0 and maximum value of range.
             var max_h = -map(tempData[i].value, 0, max(range),height/20, canvas_height-height/10);
+
+            // generate a random number
+            var myRandom = Math.floor(Math.random()*30)+1;
 
             // increment the value of tempData[i].value by a random fraction of the data[i].value
             tempData[i].value += data[i].value/myRandom;
