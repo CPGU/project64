@@ -39,6 +39,9 @@ function SalesVolumesByRegion(c) {
 
         // call function to remove duplicate region names.
         regions = removeRegionDuplicates(regions);
+        
+        // validates the url and if an incorrect url is entered, returns user to /data.html
+        regionValidation(decodeURI(getRequestURL(url)), regions);
 
         //comparison
         // call functions to create a Compare check box and a dropdown menu.
@@ -53,7 +56,7 @@ function SalesVolumesByRegion(c) {
         fillDropdownMenu(regions, compare_region_sel);
 
         // when compare_region_sel is changed, call this.compareResetCount and this.draw
-        compare_region_sel.changed(this.compareResetCount, this.draw);
+        compare_region_sel.changed(this.compareResetCount);
         
         // function call to create a snapshot button
         createSnapshotButton(this);
@@ -64,12 +67,26 @@ function SalesVolumesByRegion(c) {
         tempDataCount = 0;
         compareTempData = [];
         compareTempDataCount = 0;
+
+        // create a universal navbar dropdown menu
+        createNavbarRegionDropdownMenu();
+
+        // fill dropdown menu
+        fillDropdownMenu(regions, region_sel);
+
+        $("#navbarRegionSelection option").filter(function(i, e) {
+            return $(e).text() == decodeURI(getRequestURL(url));
+        }).prop("selected", true);
+        region_sel.changed(this.resetAndReload);
     };
 
     // when called, this method resets the value of tempData to an empty array and tempDataCount to 0
-    this.resetCount = function() {
+    // it also updates the url with the new region_sel value
+    // it also gives a property of selected true to the dropdown menu option related to the url
+    this.resetAndReload = function() {
         tempData = [];
         tempDataCount = 0;
+        window.history.pushState({}, null, '/data.html?region='+region_sel.value());
     };
 
     // when called, this method resets the value of compareResetData to an empty array and compareTempDataCount to 0
@@ -189,6 +206,11 @@ function SalesVolumesByRegion(c) {
 
     // this method saves whatever is on the canvas
     this.snapshot = function() {
-        saveCanvas(c, 'Test', 'png');
-    }
+
+        if(compareBox.checked()) {
+            saveCanvas(c, "Sales_volumes_for_"+joinText(region_sel.value())+"_and_"+joinText(compare_region_sel.value()), 'png');
+        } else {
+            saveCanvas(c, "Sales_volumes_for_"+joinText(region_sel.value()), 'png');
+        }
+    };
 }

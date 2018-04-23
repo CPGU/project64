@@ -32,7 +32,15 @@ function OverallRegionData() {
             console.log("Data not yet loaded!");
             return;
         }
-        
+
+        // create a variable and assign it the column with header 'name' from the this.data table
+        var regions = this.salesVolumeTable.getColumn('Name');
+
+        // call function to remove duplicate region names.
+        regions = removeRegionDuplicates(regions);
+
+        // validates the url and if an incorrect url is entered, returns user to /data.html
+        regionValidation(decodeURI(getRequestURL(url)), regions);
 
         //add comparison
         whileCount = 0;
@@ -66,14 +74,30 @@ function OverallRegionData() {
         monthlySpendAmount.id("monthlySpendAmount");
         monthlySpendAmount.parent("overallInfo");
 
+        var regions = this.salesVolumeTable.getColumn('Name');
+        regions = removeRegionDuplicates(regions);
+
+        createNavbarRegionDropdownMenu();
+        fillDropdownMenu(regions, region_sel);
+
+        $("#navbarRegionSelection option").filter(function(i, e) {
+            return $(e).text() == decodeURI(getRequestURL(url));
+        }).prop("selected", true);
+
+        region_sel.changed(this.resetAndReload);
     };
 
-    this.resetCounts = function() {
+    this.resetAndReload = function() {
         whileCount = 0;
         totalSpend = 0;
         currentMonthlyAmount = 0;
         currentYearlyAmount = 0;
         currentOverallAmount = 0;
+        window.history.pushState({}, null, '/data.html?region='+region_sel.value());
+        var region = decodeURI(getRequestURL(url));
+        $("#navbarRegionSelection option").filter(function(i, e) {
+            return $(e).text() == decodeURI(getRequestURL(url));
+        }).prop("selected", true);
     };
 
     this.destroy = function() {
@@ -106,6 +130,7 @@ function OverallRegionData() {
         this.totalSpend();
 
         var region = decodeURI(getRequestURL(url));
+
         if(region == "Please select a region" || region == "---") {
         } else {
             if(currentOverallAmount + Math.round(totalSpend/120*100)/100 < totalSpend) {

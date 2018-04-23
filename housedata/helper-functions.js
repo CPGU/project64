@@ -22,9 +22,8 @@ function createRegionCompareDropdownMenu() {
 
 function createNavbarRegionDropdownMenu() {
     region_sel = createSelect();
-    region_sel.parent('regionSelector');
+    region_sel.parent('region-select');
     region_sel.id('navbarRegionSelection');
-    region_sel.option(decodeURI(getRequestURL(url)));
     region_sel.option('---')
 }
 
@@ -117,10 +116,9 @@ function drawLabel(object, i, data, compareData) {
         var maxLabelWidth = getMaxLabelWidth(object, labelTitle, regionContext, compareContext);
         var offset = maxLabelWidth/8; 
         var rectWidth = maxLabelWidth+(offset*2);
-        // add elseif to translate label box if y is greater than canvas bottom y
         checkLabelBoundaries(object, rectWidth);
         fill(255,255,0,230);
-        setLabelBoxHeight(object, compareData, rectWidth);
+        renderLabelBoxWithHeight(object, compareData, rectWidth);
         renderLabelContext(object, compareData, labelTitle, regionContext, compareContext, offset);
     } else if(object.name.includes('Average')) {
         var date = formatDate(data[i].date);
@@ -130,10 +128,9 @@ function drawLabel(object, i, data, compareData) {
         var maxLabelWidth = getMaxLabelWidth(object, labelTitle, regionContext, compareContext);
         var offset = maxLabelWidth/8; 
         var rectWidth = maxLabelWidth+(offset*2);
-        // add elseif to translate label box if y is greater than canvas bottom y
         checkLabelBoundaries(object, rectWidth);
         fill(255,255,0,230);
-        setLabelBoxHeight(object, compareData, rectWidth);
+        renderLabelBoxWithHeight(object, compareData, rectWidth);
         renderLabelContext(object, compareData, labelTitle, regionContext, compareContext, offset);
     }
     pop();
@@ -180,7 +177,7 @@ function checkLabelBoundaries(object, rectWidth) {
     }
 }
 
-function setLabelBoxHeight(object, compareData, rectWidth) {
+function renderLabelBoxWithHeight(object, compareData, rectWidth) {
     if(object.compare && compareData.length > 0) {
         rect(0,0, rectWidth, height/15+textAscent());
     } else {
@@ -291,5 +288,16 @@ function getRequestURL(url) {
     url = getURL();
     newURL = split(url, 'region=');
     return newURL[1];
+}
 
+function joinText(text) {
+    return text.split(" ").join("_");
+}
+
+function regionValidation(urlRegion, regionsArray) {
+    // potentiall need to add an error message
+    if(!regionsArray.includes(urlRegion)) {
+        var invalidRegion = urlRegion;
+        window.location = 'index.html';
+    }
 }
