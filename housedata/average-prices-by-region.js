@@ -39,7 +39,9 @@ function AveragePriceByRegion(c) {
 
         // call function to remove duplicate region names.
         regions = removeRegionDuplicates(regions);
-        
+
+        // validates the url and if an incorrect url is entered, returns user to /data.html
+        regionValidation(decodeURI(getRequestURL(url)), regions);
 
         //comparison
         // call functions to create a Compare check box and a dropdown menu.

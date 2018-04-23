@@ -41,6 +41,9 @@ function AveragePriceByRegionByYear(c) {
         // call function to remove duplicate region names.
         regions = removeRegionDuplicates(regions);
 
+        // validates the url and if an incorrect url is entered, returns user to /data.html
+        regionValidation(decodeURI(getRequestURL(url)), regions);
+
         // Create a year select DOM element
         createYearDropdownMenu();
 

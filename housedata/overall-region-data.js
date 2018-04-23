@@ -33,6 +33,15 @@ function OverallRegionData() {
             return;
         }
 
+        // create a variable and assign it the column with header 'name' from the this.data table
+        var regions = this.salesVolumeTable.getColumn('Name');
+
+        // call function to remove duplicate region names.
+        regions = removeRegionDuplicates(regions);
+
+        // validates the url and if an incorrect url is entered, returns user to /data.html
+        regionValidation(decodeURI(getRequestURL(url)), regions);
+
         //add comparison
         whileCount = 0;
         totalSpend = 0;
