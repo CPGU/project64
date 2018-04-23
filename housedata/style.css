@@ -130,11 +130,16 @@ button#snapshot {
     outline: navajowhite
 }
 
-#compare-region-select select {
+#compare-region-select {
     position: absolute;
-    top: 120px;
-    left: 1400px;
-    padding: 8px 10px;
+    left: 65vw;
+    margin-top: 5vh;
+}
+
+#compare-box {
+    margin-top:2vh;
+    position: absolute;
+    left: 65vw;
 }
 
 #region-select select {
