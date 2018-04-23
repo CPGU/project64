@@ -1,14 +1,17 @@
+// function is used to create a dropdown menu to display all regions
 function createRegionDropdownMenu() {
     region_sel = createSelect();
     region_sel.parent('region-select');
     region_sel.id('regionSelection');
 }
 
+// function is used to create a checkbox which is unticked by default
 function createCompareCheckbox() {
     compareBox = createCheckbox('Compare', false);
     compareBox.parent('compare-box');
 }
 
+// function is used to create a dropdown menu to display all regions
 function createRegionCompareDropdownMenu() {
     compare_region_sel = createSelect();
     compare_region_sel.parent('compare-region-select');
@@ -16,13 +19,14 @@ function createRegionCompareDropdownMenu() {
     compare_region_sel.hide();
 }
 
+// function is used to create a dropdown menu to display all regions
 function createNavbarRegionDropdownMenu() {
     region_sel = createSelect();
     region_sel.parent('region-select');
     region_sel.id('navbarRegionSelection');
     region_sel.option('---')
 }
-
+// function is used to create a dropdown menu to display all years
 function createYearDropdownMenu() {
     year_sel = createSelect();
     year_sel.parent('year-select');
@@ -260,7 +264,9 @@ function renderLabelContext(object, compareData, title, region, compare, offset)
     }
 }
 
+// function is used to format the date from '01/01/1995' to '01': 'January'
 function formatDate(rawDate) {
+    // splits the date values
     var splitDate = rawDate.split('-');
     return {
         '01': 'January',
@@ -278,8 +284,8 @@ function formatDate(rawDate) {
     }[splitDate[1]] + " " + splitDate[0];
 }
 
+// function returns the number string represented to english
 function formatNumber(number) {
-    // this method returns the number string represented to english'
     return Number(number).toLocaleString('en');
 }
 
@@ -340,6 +346,7 @@ function graphLegend(compare, region, compareRegion) {
     }
 }
 
+// function is used to get the seleced year
 function getSelectedYearData(rows, year) {
     return rows.filter(function(item) {
         return item.arr[0].includes(year);
