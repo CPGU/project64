@@ -188,7 +188,7 @@ function SalesVolumesByRegion(c) {
     };
 
     // this method saves whatever is on the canvas
-    this.snapshot = function(c) {
-        saveCanvas(this.c, 'Test', 'png');
+    this.snapshot = function() {
+        saveCanvas(c, 'Test', 'png');
     }
 }

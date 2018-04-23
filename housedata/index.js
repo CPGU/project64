@@ -19,5 +19,6 @@ function setup() {
 }
 
 function GoTo() {
+    // Redirecting the user to data.html using a get request.
     window.location.href = 'data.html?region=' + region_sel.value();
 }
