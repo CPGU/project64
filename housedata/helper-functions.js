@@ -296,9 +296,8 @@ function joinText(text) {
 
 function regionValidation(urlRegion, regionsArray) {
     // potentiall need to add an error message
-    if(regionsArray.includes(urlRegion)) {
-    } else {
+    if(!regionsArray.includes(urlRegion)) {
         var invalidRegion = urlRegion;
-        window.location = 'data.html';
+        window.location = 'index.html';
     }
 }
