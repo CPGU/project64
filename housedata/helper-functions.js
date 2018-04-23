@@ -116,10 +116,9 @@ function drawLabel(object, i, data, compareData) {
         var maxLabelWidth = getMaxLabelWidth(object, labelTitle, regionContext, compareContext);
         var offset = maxLabelWidth/8; 
         var rectWidth = maxLabelWidth+(offset*2);
-        // add elseif to translate label box if y is greater than canvas bottom y
         checkLabelBoundaries(object, rectWidth);
         fill(255,255,0,230);
-        setLabelBoxHeight(object, compareData, rectWidth);
+        renderLabelBoxWithHeight(object, compareData, rectWidth);
         renderLabelContext(object, compareData, labelTitle, regionContext, compareContext, offset);
     } else if(object.name.includes('Average')) {
         var date = formatDate(data[i].date);
@@ -129,10 +128,9 @@ function drawLabel(object, i, data, compareData) {
         var maxLabelWidth = getMaxLabelWidth(object, labelTitle, regionContext, compareContext);
         var offset = maxLabelWidth/8; 
         var rectWidth = maxLabelWidth+(offset*2);
-        // add elseif to translate label box if y is greater than canvas bottom y
         checkLabelBoundaries(object, rectWidth);
         fill(255,255,0,230);
-        setLabelBoxHeight(object, compareData, rectWidth);
+        renderLabelBoxWithHeight(object, compareData, rectWidth);
         renderLabelContext(object, compareData, labelTitle, regionContext, compareContext, offset);
     }
     pop();
@@ -179,7 +177,7 @@ function checkLabelBoundaries(object, rectWidth) {
     }
 }
 
-function setLabelBoxHeight(object, compareData, rectWidth) {
+function renderLabelBoxWithHeight(object, compareData, rectWidth) {
     if(object.compare && compareData.length > 0) {
         rect(0,0, rectWidth, height/15+textAscent());
     } else {
