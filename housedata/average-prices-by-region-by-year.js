@@ -58,7 +58,7 @@ function AveragePriceByRegionByYear(c) {
         fillDropdownMenu(yearList, year_sel);
 
         // when year_sel is changed, call this.resetCount and then this.draw
-        year_sel.changed(this.resetCount, this.draw);
+        year_sel.changed(this.resetAndReload);
         
         //comparison
         // call functions to create a Compare check box and a dropdown menu.
@@ -73,7 +73,7 @@ function AveragePriceByRegionByYear(c) {
         fillDropdownMenu(regions, compare_region_sel);
 
         // when compare_year_sel is changed, call this.compareResetCount and this.draw
-        compare_region_sel.changed(this.compareResetCount, this.draw);
+        compare_region_sel.changed(this.compareResetCount);
 
         // function call to create a snapshot button
         createSnapshotButton(this);
@@ -86,12 +86,19 @@ function AveragePriceByRegionByYear(c) {
         compareTempData = [];
         compareTempDataCount = 0;
         
+        createNavbarRegionDropdownMenu();
+        fillDropdownMenu(regions, region_sel);
+
+        var region = decodeURI(getRequestURL(url));
+        $("#navbarRegionSelection option:contains('"+region+"')").prop('selected', true);
+        region_sel.changed(this.resetAndReload);
     };
 
     // when called, this method resets the value of tempData to an empty array and tempDataCount to 0
-    this.resetCount = function() {
+    this.resetAndReload = function() {
         tempData = [];
         tempDataCount = 0;
+        window.history.pushState({}, null, '/data.html?region='+region_sel.value());
     };
 
     // when called, this method resets the value of compareResetData to an empty array and compareTempDataCount to 0

@@ -32,7 +32,6 @@ function OverallRegionData() {
             console.log("Data not yet loaded!");
             return;
         }
-        
 
         //add comparison
         whileCount = 0;
@@ -66,14 +65,26 @@ function OverallRegionData() {
         monthlySpendAmount.id("monthlySpendAmount");
         monthlySpendAmount.parent("overallInfo");
 
+        var regions = this.salesVolumeTable.getColumn('Name');
+        regions = removeRegionDuplicates(regions);
+
+        createNavbarRegionDropdownMenu();
+        fillDropdownMenu(regions, region_sel);
+
+        $("#navbarRegionSelection option:contains('"+decodeURI(getRequestURL(url))+"')").prop('selected', true);
+
+        region_sel.changed(this.resetAndReload);
     };
 
-    this.resetCounts = function() {
+    this.resetAndReload = function() {
         whileCount = 0;
         totalSpend = 0;
         currentMonthlyAmount = 0;
         currentYearlyAmount = 0;
         currentOverallAmount = 0;
+        window.history.pushState({}, null, '/data.html?region='+region_sel.value());
+        var region = decodeURI(getRequestURL(url));
+        $("#navbarRegionSelection option:contains('"+region+"')").prop('selected', true);
     };
 
     this.destroy = function() {
@@ -106,6 +117,7 @@ function OverallRegionData() {
         this.totalSpend();
 
         var region = decodeURI(getRequestURL(url));
+
         if(region == "Please select a region" || region == "---") {
         } else {
             if(currentOverallAmount + Math.round(totalSpend/120*100)/100 < totalSpend) {

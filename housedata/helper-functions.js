@@ -22,9 +22,8 @@ function createRegionCompareDropdownMenu() {
 
 function createNavbarRegionDropdownMenu() {
     region_sel = createSelect();
-    region_sel.parent('regionSelector');
+    region_sel.parent('region-select');
     region_sel.id('navbarRegionSelection');
-    region_sel.option(decodeURI(getRequestURL(url)));
     region_sel.option('---')
 }
 
@@ -291,5 +290,4 @@ function getRequestURL(url) {
     url = getURL();
     newURL = split(url, 'region=');
     return newURL[1];
-
 }
