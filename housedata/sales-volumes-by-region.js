@@ -39,6 +39,9 @@ function SalesVolumesByRegion(c) {
 
         // call function to remove duplicate region names.
         regions = removeRegionDuplicates(regions);
+        
+        // validates the url and if an incorrect url is entered, returns user to /data.html
+        regionValidation(decodeURI(getRequestURL(url)), regions);
 
         //comparison
         // call functions to create a Compare check box and a dropdown menu.
@@ -65,10 +68,12 @@ function SalesVolumesByRegion(c) {
         compareTempData = [];
         compareTempDataCount = 0;
 
+        // create a universal navbar dropdown menu
         createNavbarRegionDropdownMenu();
+
+        // fill dropdown menu
         fillDropdownMenu(regions, region_sel);
 
-        var region = decodeURI(getRequestURL(url));
         $("#navbarRegionSelection option").filter(function(i, e) {
             return $(e).text() == decodeURI(getRequestURL(url));
         }).prop("selected", true);

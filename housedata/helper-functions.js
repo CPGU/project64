@@ -293,3 +293,12 @@ function getRequestURL(url) {
 function joinText(text) {
     return text.split(" ").join("_");
 }
+
+function regionValidation(urlRegion, regionsArray) {
+    // potentiall need to add an error message
+    if(regionsArray.includes(urlRegion)) {
+    } else {
+        var invalidRegion = urlRegion;
+        window.location = 'data.html';
+    }
+}
