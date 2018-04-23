@@ -48,43 +48,83 @@ function removeYearDuplicates(items) {
     return yearList;
 }
 
+// function that fills a a select DOM element
 function fillDropdownMenu(items, menu) {
+    // loop through and add an option to the drop down menu
     for(var i=0; i<items.length; i++) {
         menu.option(items[i]);
     }
 }
 
+// function that takes items as a parameter and sorts the data into a more manageable format
 function sortRegionData(items) {
+    // initialise an empty array for just number values 
     var regionValue = [];
+
+    // initialise an empty array for just objects 
     var regionData = [];
+
+    // loop through the length of items
     for(var i=0; i<items.length; i++) {
+        // for each iteration create an object that takes 3 properties (date, region and value) 
         var data = {
             date: items[i].arr[0],
             region: items[i].arr[1],
             value: items[i].arr[2],
         }
+
+        // push the value property into the regionValue array
+        // this is later used in the max() function for scaling the graph
         regionValue.push(data.value);
+
+        // push the data object into the regionData array
+        // this array is later used to grab data on the graph label.
         regionData.push(data);
     }
+
+    // initialise an object
     var dataObject = new Object();
+
+    // returning multiple values in a function
+    // assign the regionValue and regionData arrays to a property in dataObject.
     dataObject.regionValue = regionValue;
     dataObject.regionData = regionData;
+
+    // return dataObject, which contains two properties for unpacking later.
     return dataObject;
 }
 
+// function that draws the line graph, with animation
 function drawLineGraph(tempData, data, value, range, r, g, b) {
     push();
+    // r,g and b are parameters that are passed to generate a stroke colour
     stroke(r, g, b);
+
+    // create the graph data line by beginning shape
     beginShape();
+
+    // loop through the length of data
     for(var i=0; i<data.length; i++) {
-        if(tempData[i].value + data[i].value/60 < data[i].value) {
+        // generate a random number
+        var myRandom = Math.floor(Math.random()*30)+1;
+
+        // tempData[i].value has already been set to 0 and is used to compare values against data[i].value.
+        if(tempData[i].value + data[i].value/myRandom < data[i].value) {
+
+            // pass tempData[i].value as the value to be mapped if its value is less than data[i].value.
+            // range is the regionValue array generated in sortRegionData();
+            // mapping the maximum height value from between 0 and maximum value of range.
             var max_h = -map(tempData[i].value, 0, max(range),height/20, canvas_height-height/10);
-            var myRandom = Math.floor(Math.random()*30)+1;
+
+            // increment the value of tempData[i].value by a random fraction of the data[i].value
             tempData[i].value += data[i].value/myRandom;
         } else {
+            // pass data[i].value as the value to be mapped otherwise.
             var max_h = -map(data[i].value, 0, max(range),height/20, canvas_height-height/10);
         }
         noFill();
+
+        // x position of the graph data line.
         var x = map(i, 0, data.length, 0, canvas_width);
         vertex(x, canvas_bottom_y + max_h);
     }
@@ -92,18 +132,27 @@ function drawLineGraph(tempData, data, value, range, r, g, b) {
     pop();
 }
 
+// function that generates the graph reference lines
+// function is called inside a for loop so takes loop variable i as a parameter as well
 function graphLines(data, x, i) {
     push()
+    // get month number from data object array
     var month = data[i].date.split('-')[1]
+
+    // determine whether the month is January or not.
     if(month == '01') {
+        // if Jan then set a more solid colour
         stroke(200,200,200, 120);
     } else {
+        // otherwise set a more transparent, lighter colour
         stroke(200,200,200, 50);
     }
     line(x, canvas_bottom_y, x, 0);
     pop();
 }
 
+// function that draws a label near the cursor with information about the graph data
+// this function is called inside a loop, so a loop variable i is also passed
 function drawLabel(object, i, data, compareData) {
     push();
     strokeWeight(1);
@@ -111,6 +160,8 @@ function drawLabel(object, i, data, compareData) {
     if(object.name.includes('Sales')) {
         var date = formatDate(data[i].date);
         var labelTitle = "Sales Volume for " + date;
+
+        // get region name from the url
         var regionContext = decodeURI(getRequestURL(url)) + ": " + formatNumber(data[i].value);
         var compareContext = getCompareContext(object, compareData, i);
         var maxLabelWidth = getMaxLabelWidth(object, labelTitle, regionContext, compareContext);
@@ -136,6 +187,7 @@ function drawLabel(object, i, data, compareData) {
     pop();
 }
 
+// function that returns some context for the label based on if the user has selected a compare option or not.
 function getCompareContext(object, compareData, i) {
     if(object.compare && compareData.length > 0) {
         var compareContext = compare_region_sel.value() + ": " + formatNumber(compareData[i].value);
@@ -143,12 +195,17 @@ function getCompareContext(object, compareData, i) {
     return compareContext
 }
 
+// function that returns a maximun label width value
+// compare parameter is an optional parameter, only passed if compare is set
 function getMaxLabelWidth(object, title, region, compare) {
+    // compare widths and returns the width of largest when compare is not set
     if(textWidth(title) >= textWidth(region)) {
         var maxLabelWidth = textWidth(title);
     } else {
         var maxLabelWidth = textWidth(region);
     }
+
+    // if compare is passed as an argument, then return its width as the maximum width only if it is greater than the other two text widths
     if(compare !== undefined) {
         if(textWidth(compare) >= textWidth(title)) {
             if(textWidth(compare) >= textWidth(region)) {
@@ -159,7 +216,9 @@ function getMaxLabelWidth(object, title, region, compare) {
     return maxLabelWidth;
 }
 
+// function that checks the label box boundaries and detects collision
 function checkLabelBoundaries(object, rectWidth) {
+    // if it detects that the box is outside of the width and height of the canvas, then translate the box to a different position
     if(mouseX + 10 + rectWidth >= width) {
          translate(mouseX - 10 - rectWidth, mouseY+10);
     } else {
@@ -177,6 +236,7 @@ function checkLabelBoundaries(object, rectWidth) {
     }
 }
 
+// function that renders the label box with a height
 function renderLabelBoxWithHeight(object, compareData, rectWidth) {
     if(object.compare && compareData.length > 0) {
         rect(0,0, rectWidth, height/15+textAscent());
@@ -185,6 +245,7 @@ function renderLabelBoxWithHeight(object, compareData, rectWidth) {
     }
 }
 
+// a function that adds context to the graph label
 function renderLabelContext(object, compareData, title, region, compare, offset) {
     fill(0);
     textStyle(BOLD);

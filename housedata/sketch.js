@@ -38,6 +38,9 @@ function draw() {
     // call the draw method of the selectedFigure object from gallery.
     if (gallery.selectedFigure != null) {
         gallery.selectedFigure.draw();
+    } else {
+        // add a display/instructions here
+        text('Select a data type in the menu on the left', 200, 200);
     }
 }
 
