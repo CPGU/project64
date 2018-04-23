@@ -1,7 +1,7 @@
 function AveragePriceByRegionByYear(c) {
 
     // Name for the visualisation to appear in the menu bar.
-    this.name = 'Average Prices By Region By Year';
+    this.name = 'Average Prices By Year';
 
     // Each visualisation must have a unique ID with no special
     // characters.
@@ -121,14 +121,6 @@ function AveragePriceByRegionByYear(c) {
     this.destroy = function() {
         removeElements();
     };
-
-    // Create a new pie chart object.
-    // unused at the moment
-    this.pie = new PieChart(width / 2, height / 2, width * 0.4);
-
-    // Create a new pie chart object.
-    // unused at the moment
-    this.barGraph = new BarGraph();
 
     // this property is assigned a new Line Graph object
     this.lineGraph = new LineGraph(this);

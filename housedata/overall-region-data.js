@@ -104,8 +104,6 @@ function OverallRegionData() {
         removeElements();
     };
 
-    this.barGraph = new BarGraph();
-
     this.lineGraph = new LineGraph(this);
 
     this.totalSpend = function() {
