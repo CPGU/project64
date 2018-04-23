@@ -29,7 +29,7 @@
 }
 
 #figure-menu {
-    position: absolute; left: 0px; top: 68px;
+    position: absolute; left: 0px;
 }
 
 #yearSelection {
@@ -70,6 +70,7 @@
 }
 
 #navbar li.title {
+    margin-top: 10px;
     float: left;
 }
 
@@ -104,6 +105,15 @@ header p {
     color: #FFF;    
 }
 
+#errorAlert {
+    width: 30%;
+    padding: 14px 16px;
+    display: none;
+    background-color: #BD3F32;
+    margin-bottom: 20px;
+    border-radius: 20px;
+}
+
 select#regionSelection {
     padding: 6px 8px;
     border: 1px solid #bdc3c7;
@@ -120,17 +130,17 @@ button#snapshot {
     outline: navajowhite
 }
 
-#compare-box {
-    position: absolute;
-    top: 100px;
-    left: 1400px;
-}
-
 #compare-region-select select {
     position: absolute;
     top: 120px;
     left: 1400px;
     padding: 8px 10px;
+}
+
+#region-select select {
+    padding: 8px 10px;
+    border-radius: 10px;
+    outline: none;
 }
 
 
