@@ -122,7 +122,7 @@ select#regionSelection {
 }
 
 button#snapshot {
-    padding: 12px 14px;
+    padding: 0.7em 1em;
     background-color: #2ecc71;
     border: none;
     color: #FFF;
