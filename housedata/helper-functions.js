@@ -353,6 +353,7 @@ function getSelectedYearData(rows, year) {
     });
 }
 
+// a function that pushes data object into an array
 function createTemporaryDataArray(count, array, tempArray) {
     // while loop that checks if count is less than the number of elements in the array 
     while(count < array.length) {
@@ -378,6 +379,7 @@ function getRequestURL(url) {
     return newURL[1];
 }
 
+// function that joins replaces a ' ' with '_'
 function joinText(text) {
     return text.split(" ").join("_");
 }
