@@ -16,9 +16,23 @@ function setup() {
     fillDropdownMenu(regions, region_sel);
 
     region_sel.changed(GoTo);
+
+    // call the validate error function
+    validateErrorURL();
 }
 
 function GoTo() {
     // Redirecting the user to data.html using a get request.
     window.location.href = 'data.html?region=' + region_sel.value();
 }
+
+function validateErrorURL() {
+    // grab the url content
+    errorURL = getURL();
+    // split the url
+    errorURL = split(errorURL, '?');
+    // if the url contains other values, display alert box.
+    if(errorURL[1]) {
+        $('#errorAlert').show();
+    }
+}   

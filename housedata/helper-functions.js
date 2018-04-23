@@ -1,18 +1,17 @@
-function stringsToNumbers (array) {
-  return array.map(Number);
-}
-
+// function is used to create a dropdown menu to display all regions
 function createRegionDropdownMenu() {
     region_sel = createSelect();
     region_sel.parent('region-select');
     region_sel.id('regionSelection');
 }
 
+// function is used to create a checkbox which is unticked by default
 function createCompareCheckbox() {
     compareBox = createCheckbox('Compare', false);
     compareBox.parent('compare-box');
 }
 
+// function is used to create a dropdown menu to display all regions
 function createRegionCompareDropdownMenu() {
     compare_region_sel = createSelect();
     compare_region_sel.parent('compare-region-select');
@@ -20,30 +19,38 @@ function createRegionCompareDropdownMenu() {
     compare_region_sel.hide();
 }
 
+// function is used to create a dropdown menu to display all regions
 function createNavbarRegionDropdownMenu() {
     region_sel = createSelect();
     region_sel.parent('region-select');
     region_sel.id('navbarRegionSelection');
     region_sel.option('---')
 }
-
+// function is used to create a dropdown menu to display all years
 function createYearDropdownMenu() {
     year_sel = createSelect();
     year_sel.parent('year-select');
     year_sel.id('yearSelection');
 }
 
+// function which removes all duplicate region values. This is beacuse the CSV file includes duplicate values 
 function removeRegionDuplicates(items) {
+    // the set object lets us store unique region values.
     items = new Set(items);
+    // the Array.from() method then creates a new array from the items varaible.
     items = Array.from(items);
     return items;
 }
 
+// function which removes all duplicate year values. This is beacuse the CSV file includes duplicate values 
 function removeYearDuplicates(items) {
+    // the set object lets us store unique year values.
     let yearSet = new Set();
+    // for loop to iterate through the years
     for(var i=0; i<items.length; i++) {
         yearSet.add(items[i].split('-')[0]);
     }
+    // the Array.from() method then creates a new array from the items varaible.
     var yearList = Array.from(yearSet);
     return yearList;
 }
@@ -257,7 +264,9 @@ function renderLabelContext(object, compareData, title, region, compare, offset)
     }
 }
 
+// function is used to format the date from '01/01/1995' to '01': 'January'
 function formatDate(rawDate) {
+    // splits the date values
     var splitDate = rawDate.split('-');
     return {
         '01': 'January',
@@ -275,27 +284,40 @@ function formatDate(rawDate) {
     }[splitDate[1]] + " " + splitDate[0];
 }
 
+// function returns the number string represented to english
 function formatNumber(number) {
     return Number(number).toLocaleString('en');
 }
 
+// this function is used to display a snapshot button
 function createSnapshotButton(object) {
+    // the button uses font-awesome web icons to place a camera icon in the moment
     var button = createButton("Snapshot <i class='fa fa-camera'></i>");
+    // assign the button to a ID so it can be styled
     button.id('snapshot')
+    // attaches the button to a specifed parent. This is a way of setting the container for the element
     button.parent('snapshot-button');
+    // the mouse pressed function is used to call another function or object once the button has been pressed
     button.mousePressed(object.snapshot);
 }
 
+// This function is used to only display the snapshot button when there is content to save
 function toggleSnapshotDisplay(region, year) {
+    // if there is no year selected    
     if(year === undefined) {
+        // if the region dropdown value is not 'Please select a region' or '---' then display the snapshot button
         if(region != "Please select a region" && region != "---") {
             $('#snapshot-button').show();
+        // if the region dropdown value is 'Please select a region' or '---' then hide the snapshot button
         } else {
             $('#snapshot-button').hide();
         }
+    // if a year is selected   
     } else {
+        // if the region and year dropdown value is not 'Please select a region', '---' or 'Please select a year' then display the snapshot button
         if(region != "Please select a region" && region != "---" && year != "Please select a year" && year != "---") {
             $('#snapshot-button').show();
+        // if the region and uear dropdown value is 'Please select a region', '---' or 'Please select a year' then hide the snapshot button
         } else {
             $('#snapshot-button').hide();
         }
@@ -324,6 +346,7 @@ function graphLegend(compare, region, compareRegion) {
     }
 }
 
+// function is used to get the seleced year
 function getSelectedYearData(rows, year) {
     return rows.filter(function(item) {
         return item.arr[0].includes(year);
@@ -345,9 +368,13 @@ function createTemporaryDataArray(count, array, tempArray) {
     }
 }
 
+// function that grabs the url and splits to return the region value
 function getRequestURL(url) {
+    // grabs the current url of a page.
     url = getURL();
+    // grabs the value after 'region=' and then stores in the newURL variable.
     newURL = split(url, 'region=');
+    // returns the value of the url string
     return newURL[1];
 }
 
@@ -355,10 +382,12 @@ function joinText(text) {
     return text.split(" ").join("_");
 }
 
+// function that validates the url to see if the GET request is valid, if not redirect to index.html?errorValidation which displays an error message 
 function regionValidation(urlRegion, regionsArray) {
     // potentiall need to add an error message
     if(!regionsArray.includes(urlRegion)) {
         var invalidRegion = urlRegion;
-        window.location = 'index.html';
+        // redirects the user to the index page where it will display an error message.
+        window.location = 'index.html?errorValidation';
     }
 }

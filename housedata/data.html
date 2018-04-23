@@ -41,6 +41,18 @@
     <div id="navbar">
         <ul>
             <li class="title"><a href="index.html">Project<b>64</b></a></li>
+            <li>
+                <a href="" id="not-active">
+                  <div id="snapshot-button">
+                  </div>
+                </a>
+            </li>
+            <li>
+                <a href="" id="not-active">
+                  <div id="region-select">
+                  </div>
+                </a>
+            </li>
           </ul>
     </div>
 
@@ -49,16 +61,20 @@
       <ul id="figure-menu"></ul>
       <div id="graph">
       </div>
-      <div id="region-select">
-      </div>
+      
       <div id="year-select">
       </div>
       <div id="compare-box">
       </div>
       <div id="compare-region-select">
       </div>
-      <div id="snapshot-button">
-      </div>
+      
     </div>
   </body>
+  <script>
+    $('a#not-active').on('click', function(e) {
+      // prevent the default action from executing
+      e.preventDefault();
+    });
+  </script>
 </html>
