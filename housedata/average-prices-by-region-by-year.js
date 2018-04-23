@@ -200,7 +200,12 @@ function AveragePriceByRegionByYear(c) {
         }
     };
 
-    this.snapshot = function(c) {
-        saveCanvas(this.c, 'Test', 'png');
-    }
+    // this method saves whatever is on the canvas
+    this.snapshot = function() {
+        if(compareBox.checked()) {
+            saveCanvas(c, "Average_prices_for_"+joinText(region_sel.value())+"_and_"+joinText(compare_region_sel.value())+"_in_"+year_sel.value(), 'png');
+        } else {
+            saveCanvas(c, "Average_prices_for_"+joinText(region_sel.value())+"_in_"+year_sel.value(), 'png');
+        }
+    };
 }

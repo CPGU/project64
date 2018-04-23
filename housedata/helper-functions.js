@@ -291,3 +291,7 @@ function getRequestURL(url) {
     newURL = split(url, 'region=');
     return newURL[1];
 }
+
+function joinText(text) {
+    return text.split(" ").join("_");
+}
