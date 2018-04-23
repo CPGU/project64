@@ -197,7 +197,7 @@ function drawLabel(object, i, data, compareData) {
 // function that returns some context for the label based on if the user has selected a compare option or not.
 function getCompareContext(object, compareData, i) {
     if(object.compare && compareData.length > 0) {
-        var compareContext = compare_region_sel.value() + ": " + formatNumber(compareData[i].value);
+        var compareContext = compare_region_sel.value() + ": £" + formatNumber(Math.round(compareData[i].value*100)/100);
     }
     return compareContext
 }
