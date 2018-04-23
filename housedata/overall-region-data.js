@@ -71,7 +71,9 @@ function OverallRegionData() {
         createNavbarRegionDropdownMenu();
         fillDropdownMenu(regions, region_sel);
 
-        $("#navbarRegionSelection option:contains('"+decodeURI(getRequestURL(url))+"')").prop('selected', true);
+        $("#navbarRegionSelection option").filter(function(i, e) {
+            return $(e).text() == decodeURI(getRequestURL(url));
+        }).prop("selected", true);
 
         region_sel.changed(this.resetAndReload);
     };
@@ -84,7 +86,9 @@ function OverallRegionData() {
         currentOverallAmount = 0;
         window.history.pushState({}, null, '/data.html?region='+region_sel.value());
         var region = decodeURI(getRequestURL(url));
-        $("#navbarRegionSelection option:contains('"+region+"')").prop('selected', true);
+        $("#navbarRegionSelection option").filter(function(i, e) {
+            return $(e).text() == decodeURI(getRequestURL(url));
+        }).prop("selected", true);
     };
 
     this.destroy = function() {

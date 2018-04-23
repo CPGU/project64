@@ -29,8 +29,6 @@ function setup() {
     gallery.addFigure(new AveragePriceByRegionByYear(c));
 
     getRequestURL(url);
-
-   
 }
 
 function draw() {

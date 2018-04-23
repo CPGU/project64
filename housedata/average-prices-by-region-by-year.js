@@ -90,7 +90,9 @@ function AveragePriceByRegionByYear(c) {
         fillDropdownMenu(regions, region_sel);
 
         var region = decodeURI(getRequestURL(url));
-        $("#navbarRegionSelection option:contains('"+region+"')").prop('selected', true);
+        $("#navbarRegionSelection option").filter(function(i, e) {
+            return $(e).text() == decodeURI(getRequestURL(url));
+        }).prop("selected", true);
         region_sel.changed(this.resetAndReload);
     };
 
